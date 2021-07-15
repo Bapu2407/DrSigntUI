@@ -1,0 +1,252 @@
+span.bootstrap-switch-handle-off.bootstrap-switch-default {
+    font-size: 13px;
+}
+.customwidth{
+  width:100% !important;
+}
+.qtycolwidth{
+  width:100% !important;
+}
+.profile-image-wrapper {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.borderless td, .borderless th {
+    border: none;
+}
+.divider {
+    border-bottom: 1px solid black;
+    //margin-top:1px;
+    width: 100%;
+  }
+  .para{
+    width:100%;
+    height:auto !important;
+}
+.reducetextforicon{
+  font-size :20px;
+  margin-left:5px;
+}
+.boldtext{
+  font-size :18px;
+  font-weight: bold !important;
+}
+
+.borderToMainDiv{
+  border-radius: 10px;
+    border: 2px solid rgb(15, 119, 41);
+}
+.containerDM{    
+  margin-top:10px;
+  margin-right:10px !important;
+  margin-left:10px;
+  padding-right:20px !important;
+    padding-left:20px;
+}
+@media (min-width: 481px) {
+  .containerDM{    
+    margin-top:10px;
+    padding-right:20px !important;
+    padding-left:20px;
+    margin-right:300px !important;
+    margin-left:300px;
+  }
+
+}
+
+@media (min-width: 961px) {
+  .containerDM{    
+    margin-top:10px;
+    padding-right:20px !important;
+    padding-left:20px;
+    margin-right:400px !important;
+    margin-left:400px;
+  }
+
+}
+
+
+
+.profile-image {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    .edit-icon {
+      background: white;
+      height: 25px;
+      display: inline-block;
+      width: 25px;
+      border-radius: 20%;
+      padding: 4px;
+      margin-top:-10px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding-top:7px !important;
+      padding-bottom:2px !important;
+
+    }
+  }
+ 
+  .oldprescription-image-wrapper {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.my-container .custom-class{
+  width: 120px;
+  height: 120px;
+  color:black;
+  top: 40%;
+  right: 50%;
+  border: 2px solid #1f94ed;
+  border-radius: 50%;
+  //z-index: 99999;
+}
+.oldprescription-image {
+  width: 90px;
+  height: 70px;
+  border-radius: 10%;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+}
+ .confirmed {   
+    color: white;   
+    background: #117b30;    
+  }
+
+  .orderplaced {   
+    color: white;   
+    background: #7b6b11;    
+  }
+
+  .packaged {   
+    color:white;   
+    background: #B2DFEE;    
+  }
+
+  .shipped {   
+    color: #d0f1d7;   
+    background: #00688B;    
+  }
+
+  .rejected {   
+    color: #d0f1d7;   
+    background: #F08080;    
+  }
+
+.labelTitlesDM{
+    font-weight: bold;
+    font-size: 18;
+    color:red;
+}
+.marginLeft{
+    margin-left:-25px
+}
+.profile-image {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    .edit-icon {
+      background: white;
+      height: 25px;
+      display: inline-block;
+      width: 25px;
+      border-radius: 20%;
+      padding: 4px;
+      margin-top:-10px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding-top:7px !important;
+      padding-bottom:2px !important;
+
+    }
+  }
+  .prescriptionlistclass{
+    height: 290px !important;    
+    width: auto;
+    overflow-y: scroll;
+  }
+  .clearfix {
+    position: relative;
+
+    font-size: 14px;
+  }
+  .customradio{
+    font-size: 48px !important;
+  }
+.redcolor{
+    
+    color:red;
+}
+.pointer {
+    cursor : pointer;
+}
+.userInfo {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.userInfo:last-child {
+    border-bottom: none;
+}
+
+.modal-dialog { 
+    width: 95% !important;
+}
+.usermngtable .usermngtableinfo{
+    margin-bottom: 15px;
+}
+.usermngtable .table-responsive table td img {
+    width: 48px;
+    height: 48px;
+}  
+.usermngtable .accordion {
+    width: 100%;
+}
+.usermngtable .accordion .card-body {
+    padding: 1.25rem 0;
+}
+h3 {
+  margin: 0 0 10px;
+}
+pre {
+  background-color: #f5f5f5;
+  padding: 15px;
+}
+.no-resize {
+    resize : none;
+}
+.m-20 {
+    margin : 20px;
+}
+.no-focus {
+    outline : none;
+}

@@ -1,0 +1,415 @@
+<div>
+  <app-page-header [heading]="'Order'" [icon]="'fa-user'"></app-page-header>
+</div>
+
+<div class="row">
+  <div class="col-md-12" *ngIf="user.role.doctor.order.create">                          
+      <button type="button" class="btn btn-dark" (click)="openAddOrderDialog()">Add Order</button>
+      <button type="button" class="ml-4 btn btn-dark" (click)="gotoCustomerPage()">Add Customer</button>
+      <button type="button" *ngIf="fromCustomerPage" class="ml-4 btn btn-dark" (click)="openCustomerPage()">Go Back</button>
+</div>
+
+
+<!--div class="col-md-12 text-right" *ngIf="user.role.doctor.order.view">    
+<button type="button" class="btn btn-dark" (click)="reset();">Reset Filters</button>
+</div-->
+<div class="col-md-12 text-right" *ngIf="user.role.doctor.order.view">     
+  <i class="fa fa-filter customfiltericon m-10" aria-hidden="true" (click)="openSearchFilter()"></i>                     
+  <i class="fa fa-refresh customfiltericon m-10" (click)="reset();" aria-hidden="true"></i>
+  <!--button type="button" class="btn btn-dark" (click)="openSearchFilter()">Search Filters</button-->
+
+</div>
+</div>
+
+<ng-template #enlargedImageModal let-close="close">
+  <div class="modal-header py-1">
+    <h4 class="modal-title headerTitle mb-0">Enlarged Prescription View</h4>
+    
+    <button type="button" class="close" (click)="closeCustomModal();">×</button>
+</div>
+
+<div class="modal-body">
+  <img src="{{enlargedPic}}" class="para"/>
+</div>
+</ng-template>
+          
+<ng-template #searFiltersModal let-close="close">
+
+  <div class="modal-header py-1">
+          <h4 class="modal-title headerTitle mb-0">Search Filters</h4>
+          
+          <button type="button" class="close" (click)="closeModal();">×</button>
+    </div>
+    <div class="modal-body">
+
+
+
+<!--div class="col-md-12 "><label class="labelTitles">Select Customer </label></div-->
+
+<!--select  [(ngModel)]="customerId"  class="form-control" (change)=       "applyFilter()">
+
+<option *ngFor="let custObj of customerList" value="{{custObj._id}}" class="labelValue">{{custObj.name}}</option>
+</select-->
+
+
+<div (click)="enableSearchByOrderId()" class="custombuttondiv">
+  <label class="customwid labelTitles">Order Id Filter</label>
+ <span class="margincustom customwid">
+ <i class=" fa fa-arrow-down text-right" aria-hidden="true" *ngIf="searchByOrderId" ></i>
+ <i class=" fa fa-arrow-up text-right" aria-hidden="true" *ngIf="!searchByOrderId" ></i>
+ </span>
+
+</div>
+<div class="col-md-12" *ngIf="searchByOrderId"> 
+  <input   class="form-control" [(ngModel)]="orderId"
+  placeholder="Enter Order Id">
+  </div>
+  
+
+<div (click)="enableSearchByCutomer()" class="custombuttondiv">
+  <label class="customwid labelTitles">Customer Filter </label>
+  <span class="margincustom customwid">
+  <i class=" fa fa-arrow-down text-right" aria-hidden="true" *ngIf="searchByCustomer" ></i>
+  <i class=" fa fa-arrow-up text-right" aria-hidden="true" *ngIf="!searchByCustomer" ></i>
+</span>
+</div>
+      <div class="col-md-12" *ngIf="searchByCustomer">
+      <ng-autocomplete 
+      [data]="customerList"
+      [(ngModel)] = "customerName"      
+      [searchKeyword]="keywordCustomer"
+      (selected)='customerSelectEvent($event)'
+      (inputChanged)='onChangeCustomerSearch($event)'      
+      [itemTemplate]="itemTemplate"
+      [notFoundTemplate]="notFoundTemplate">                                 
+      </ng-autocomplete>
+
+
+      <ng-template #itemTemplate id="itemTemplate" let-item>
+      <a [innerHTML]="item.name"></a>
+      </ng-template>
+
+      <ng-template #notFoundTemplate let-notFound>
+      <div [innerHTML]="notFound"></div>
+      </ng-template>
+
+      </div>
+
+
+      <div (click)="enableSearchByOrderDate()" class="custombuttondiv">
+         <label class="customwid labelTitles">Order date Filter</label>
+        <span class="margincustom customwid">
+        <i class=" fa fa-arrow-down text-right" aria-hidden="true" *ngIf="searchByOrderDate" ></i>
+        <i class=" fa fa-arrow-up text-right" aria-hidden="true" *ngIf="!searchByOrderDate" ></i>
+        </span>
+
+      </div>
+
+<div class="col-md-12" *ngIf="searchByOrderDate"> 
+<input type="date"   class="form-control" [(ngModel)]="orderDate"
+placeholder="Enter Order date">
+</div>
+
+<div (click)="enableSearchByStatus()" class="custombuttondiv">
+  
+
+  <label class=" customwid labelTitles">Status Filter</label>
+  <span class="margincustom customwid">
+  <i class=" fa fa-arrow-down text-right" aria-hidden="true" *ngIf="searchByStatus" ></i>
+  <i class=" fa fa-arrow-up text-right" aria-hidden="true" *ngIf="!searchByStatus" ></i>
+
+</span>
+</div>
+<div class="col-md-12 " *ngIf="searchByStatus">         
+<select   [(ngModel)]="orderStatus"  class="form-control" name="status"
+                    >                         
+                    <option value="OrderPlaced" class="labelValue">OrderPlaced</option>
+                    <option value="Confirmed" class="labelValue">Confirmed</option>
+                    <option value="Packaged" class="labelValue">Packaged</option>
+                    <option value="Shipped" class="labelValue">Shipped</option>                          
+                    <option value="Rejected" class="labelValue">Rejected</option>                          
+                </select>
+              </div>
+
+<!--div class="col-md-12 mt-4 text-center"> 
+<button type="button" class="btn btn-dark" (click)="applyFilter()">Search Order</button>    
+</div-->
+
+    
+
+
+
+      
+
+
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-primary text-left" (click)="reset();">Reset</button>
+      <button  type="button" class="btn btn-primary "
+          (click)="searchByFilters();">Search</button>
+      <button type="button" class="btn btn-primary text-right" (click)="closeModal();">Cancel</button>
+  </div>
+
+
+</ng-template>
+
+      <div class="card-body table-responsive marginLeft"> <span class="pb-3 "><b> List of existing {{userKind}}s </b>  </span>
+        <table class="table table-bordered table-sm">
+          <thead>
+          <tr>
+            <th>Order Id </th>
+              <th>Customer Name</th>
+              <th>Medicine Details</th>
+              
+              <th>Status</th>            
+              <th *ngIf="user.role.doctor.order.edit">Enable/Disable</th>              
+              <th>Created Date</th>
+              <th *ngIf="user.role.doctor.order.edit">Edit</th>
+          </tr>
+          </thead>
+          <tbody>
+              <tbody *ngIf="normalFiltereduserListArr && normalFiltereduserListArr.length>0">
+            
+              <tr class="{{obj.status | lowercase}}"  *ngFor="let obj of normalFiltereduserListArr | paginate: { id:'fororder1', itemsPerPage: pageSize, currentPage: pageNo, totalItems: totalDocRecords }">              
+         
+                  <td>{{obj?._id}}</td>                  
+                  <td>{{obj?.customer?.name}}</td>                  
+              <td >
+                
+                <table  class='table borderless'>
+                  <tr class="{{obj.status | lowercase}}" *ngFor="let med of obj.medicineList"><td class="customdiv"><b>Name:</b></td><td>{{med?.medicineName}}</td><td>/</td><td class="customdiv"><b>Qty:</b></td><td>{{med?.quantity}}</td><!--td>/</td><td class="customdiv"><b>Mg:</b></td><td>{{med?.mg}}</td--></tr>
+                
+                </table>      
+
+              </td>              
+              
+              <td>{{obj?.status}}</td>
+              <!--td *ngIf="user.role.doctor.order.edit"> 
+                <span  *ngIf="obj.active">Enabled</span>
+                <span *ngIf="!obj.active">Disabled</span>
+            </td-->
+              <td *ngIf="user.role.doctor.order.edit">               
+                <ui-switch [(ngModel)]="obj.active" (change)="updateStatus($event, obj)"></ui-switch>
+                    
+              </td>              
+<td >{{convertToHumanDate(obj.createdDate)}}</td>
+
+<td *ngIf="user.role.doctor.order.edit" ><button class="btn btn-dark" (click)="openForeditOrder(obj)"> Edit </button></td>    
+
+            </tr>
+          </tbody>
+          <div class="col-md-12 text-left clearfix ">
+          <pagination-controls class="my-pagination marginLeft"  id="fororder1" 
+               (pageChange)="pageChanged($event)"
+                      (pageBoundsCorrection)="pageChanged($event)"                      
+                      directionLinks="true"               maxSize="9"
+                      directionLinks="true"
+                      autoHide="true"
+                      responsive="true"
+                      previousLabel="Prev"
+                      nextLabel="Next"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page"></pagination-controls >
+          </div>
+          <tbody *ngIf="(normalFiltereduserListArr && normalFiltereduserListArr.length==0)">
+              <tr>
+                <td colspan="7" align = "center">No record available</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+      
+
+
+
+      <ng-template #orderFormModal let-close="close">
+        
+        
+            <div class="modal-header py-1">
+                    <h4 class="modal-title headerTitle mb-0">{{mode | titlecase}} Order</h4>
+                    <button type="button" class="close" (click)="closeModal();">×</button>
+              </div>
+              <div class="modal-body">
+
+                <div class="row m-4" *ngIf = "mode=='add'">
+                  <div class="col-md-12">
+                      <div class="form-group">
+                          <label class="labelTitles">Select Customer </label>
+                    
+                          <ng-autocomplete 
+                          [data]="customerList"
+                          [(ngModel)] = "customerName"      
+                          [searchKeyword]="keywordCustomer"
+                          (selected)='customerSelectEvent($event)'
+                          (inputChanged)='onChangeCustomerSearch($event)'      
+                          [itemTemplate]="itemTemplate"
+                          [notFoundTemplate]="notFoundTemplate">                                 
+                          </ng-autocomplete>
+                    
+                    
+                          <ng-template #itemTemplate id="itemTemplate" let-item>
+                          <a [innerHTML]="item.name"></a>
+                          </ng-template>
+                    
+                          <ng-template #notFoundTemplate let-notFound>
+                          <div [innerHTML]="notFound"></div>
+                          </ng-template>
+                    
+                          
+                         
+                      </div>
+                  </div>
+              </div>
+              <form [formGroup]="orderFormGroup" class="custom_timebox p-0">
+                <div class="row">
+                  <div class="col-md-12">
+                      <div class="form-group">
+                          <label class="labelTitles">Status </label>
+                          <div *ngIf="mode=='edit'">
+                          <select formControlName="status"  [(ngModel)]="orderObject.status"  class="form-control" name="status"
+                              >                         
+                              <option value="OrderPlaced" class="labelValue">OrderPlaced</option>
+                              <option value="Confirmed" class="labelValue">Confirmed</option>
+                              <option value="Packaged" class="labelValue">Packaged</option>
+                              <option value="Shipped" class="labelValue">Shipped</option>                          
+                              <option value="Rejected" class="labelValue">Rejected</option>                          
+                          </select>
+                        </div>
+                        <div *ngIf="mode=='add'">
+                          <input class="form-control labelValue"   disabled [(ngModel)]="orderObject.status"   formControlName="status" placeholder="OrderPlaced">
+                        </div>
+                         
+                      </div>
+                  </div>
+              </div>
+              <div style="border: 0; padding: 10;" class="row marginTop">
+                <div class="col-md-12 form-group">
+                  <label for="email" class="labelTitles"><b>Upload prescription</b></label>
+              </div>
+                <div class="col-md-12 form-group marginTop" >
+                
+                <div class="profile-image-wrapper"  >
+                  <div class="profile-image" [style.backgroundImage]="getPhoto('prescription')" (click)="enlargePic()">
+                    <span class="edit-icon" (click)="capturePhoto(null,'prescription')">
+                      <!--
+                      <i class="fa fa-plus" aria-hidden="true" *ngIf="mode=='add'" ></i>
+                      <i class="fa fa-pencil-square-o" *ngIf="mode=='edit'" aria-hidden="true" ></i>
+                     -->
+                    </span>
+                  </div>
+                </div>
+                <input type="file"  (change)="capturePhoto($event,'prescription')" />
+              </div>
+              </div>
+
+              
+        <div formArrayName="medicineListItems"
+            *ngFor="let medicine of getControls(); let i = index;">
+
+                    <div [formGroupName]="i">
+                      
+              <table class="table table-bordered table-sm mt-2">
+                <thead>
+                <tr>
+                    <th>Id </th>
+                    <th>Medicine Name</th>
+                    <th>Quantity</th>                    
+                </tr>
+                </thead>
+                      <tbody>
+                        <tr>
+                        <td style="width: 10%">{{i+1}}</td>
+                      <td style="width: 60%">
+                        
+                       <tr class="customwidth">
+                        <!--pattern="\d{1,2}/\d{1,2}/\d{4}"-->
+                        <div class="customwidth marginTop">   
+                        
+                                
+                        <ng-autocomplete 
+                        [data]="medicineArray"
+                        placeHolder="Select Medicine Name Here"
+                        [searchKeyword]="keywordMedicine"
+                        (selected)='medicineSelectEvent($event,i)'
+                        (inputChanged)='doctorMedcineSearch($event,i)'
+                        
+                        [itemTemplate]="itemTemplate"
+                        [notFoundTemplate]="notFoundTemplate">                                 
+                      </ng-autocomplete>
+                   
+                      
+                      <ng-template #itemTemplate id="itemTemplate" let-item>
+                        <a [innerHTML]="item.DESC"></a>
+                        </ng-template>
+                        <ng-template #notFoundTemplate let-notFound>
+                        <div [innerHTML]="notFound"></div>
+                        </ng-template>
+                                                        
+                      </div>
+                      </tr>
+                      <tr >
+                          
+                          <input  disabled class=" customwidth form-control" formControlName="medicineName"
+                          >
+                        </tr>
+                        
+                  </td>
+                      
+                  <td style="width: 30%">
+                    <input   class="form-control" formControlName="quantity"
+                    placeholder="Quantity">
+                    
+                  </td>
+                  
+                </tr>
+              </tbody>
+            </table>
+                </div>
+
+          <div class="row text-right ml-2">
+            <i class="fa fa-minus-circle customfiltericon m-10" aria-hidden="true" (click)="removeItem(i)"><span class="reducetextforicon">Remove</span></i>                     
+<!--
+          <button class="btn btn-dark" (click)="removeItem(i)"> Remove Medicine </button>-->
+          </div>
+  </div>
+
+  <!--Chosen name: {{ orderForm.controls.items.controls[i].controls.name.value }} -->
+
+
+
+<div class="col-md-12 text-right mt-4">
+  <i class="fa fa-plus-circle customfiltericon m-10" aria-hidden="true" (click)="addItem()"><span class="reducetextforicon">Add</span></i>    
+  <!--
+  <button class="btn btn-dark" (click)="addItem()"> Add More Medicines </button>
+  -->
+  </div>
+
+</form>
+
+
+             </div>
+             <div class="modal-footer">
+                <button [disabled]="!orderFormGroup.valid" type="button" class="btn btn-primary m-10"
+                    (click)="save();">Save</button>
+                <button type="button" class="btn btn-primary m-10" (click)="closeModal();">Cancel</button>
+            </div>
+        
+        <p *ngIf="submitAttempt" class="cutomeerrortext">
+                
+         <span class="redcolor ml-2"><i class="fa fas fa-exclamation"></i><b>&nbsp;Fix The Error : </b></span> {{form_fill_failure_msg}}
+          
+        </p>
+</ng-template>
+
+<!--jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination-->
+
+<!--div class="my-container">
+  <ngx-loading [show]="loading"></ngx-loading>
+</div-->
+
+
+
+
+
+

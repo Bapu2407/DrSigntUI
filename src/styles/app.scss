@@ -1,0 +1,95 @@
+/* You can add global styles to this file, and also import other style files */
+@import "bootstrap/bootstrap";
+@import "spinner";
+@import "utils";
+@import "rtl";
+@import "responsive";
+
+@media print {
+    .breadcrumb {
+        display: none !important;
+    }
+}
+
+.search-field {
+  max-width: 500px;
+  padding-bottom: 50px;
+  margin:auto;
+}
+.redcolor{
+    
+  color:red;
+  font-size:20px;
+}
+
+.form-control {
+  box-shadow: 0 10px 40px 0 #B0C1D9;
+}
+.form-control::placeholder  {
+  font-family: FontAwesome;
+}
+.margincustom{
+    margin-left:10%;
+  }
+  .custombuttondiv{
+    width: 100% !important;
+    height: 40px !important;
+    margin-top:30px;
+    margin-bottom:20px;
+    border: 1px solid #ccc;
+    background-color: black;
+    color:white;
+    padding:5px 5px;
+  }
+  .customwid{
+    width:80% !important;
+    min-width:50% !important;
+  }
+
+.customhyperlinkbutton{
+    font-size :14px;    
+    font-weight: bold;
+    margin-right:10px;    
+    margin-left:50px;    
+    text-decoration: underline;
+  }
+.customfiltericon{
+    font-size :25px;
+    margin-right:50px;    
+    font-weight: bold;
+  }
+.required-asterisk{
+    color: red;
+    font-weight: bold;
+    margin-left: 3px;
+    font-size: 1.2em;
+}
+
+.modal-lg {
+    max-width: 900px!important;
+}
+
+  /* Specific css for <Alert Type> */
+  .alertsContainer   {
+    border: 2px solid #ffc549;
+    //margin:10px 10px;    
+    height:100px;
+    width:100px;
+}
+.alertsContainer  .iconpanel {
+    background:#ffc549;
+    color: #fff;
+}
+.alertsContainer .messagepanel {
+    color: #000;
+    background: #fff;
+}
+.alertsContainer .closeicon {
+    color: #000;
+}
+.alertsContainer .closeicon a {
+    color: #000;
+    text-decoration: none;
+    font-size: 14px;
+}
+

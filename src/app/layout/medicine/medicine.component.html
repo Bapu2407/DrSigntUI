@@ -1,0 +1,477 @@
+<div>
+  <app-page-header [heading]="'Medicines'" [icon]="'fa-user'"></app-page-header>
+</div>
+<div class="row">
+  <div class="col-md-12" *ngIf="user.role.doctor.medicine.create">                          
+    <button type="button" class="btn btn-dark" (click)="openAddMedicineDialog()" *ngIf ="!xcelFuntionOn">Add Medicine</button>
+
+
+
+    <button type="button" *ngIf ="!xcelFuntionOn" class="m-2 btn btn-dark" (click)="openXcelFunctions()">Import from an Xcel</button>
+    <button type="button" class="m-2 btn btn-dark" (click)="openMedicinePage()" *ngIf ="xcelFuntionOn">Back To Medicine List</button>
+
+</div>
+
+
+<!--div class="col-md-12 text-right" *ngIf="user.role.doctor.order.view">    
+<button type="button" class="btn btn-dark" (click)="reset();">Reset Filters</button>
+</div-->
+<div class="col-md-12 text-right" *ngIf="user.role.doctor.medicine.view && !xcelFuntionOn">     
+  <i class="fa fa-filter customfiltericon m-10" aria-hidden="true" (click)="openSearchFilter()"></i>                     
+  <i class="fa fa-refresh customfiltericon m-10" (click)="reset();" aria-hidden="true"></i>
+  <!--button type="button" class="btn btn-dark" (click)="openSearchFilter()">Search Filters</button-->
+
+</div>
+</div>
+
+  <div class="col-md-12" >                
+            <!--div class="col-md-12 text-right " *ngIf="user.role.doctor.medicine.create">                      
+                  <div class="content">
+                    <button type="button" class="btn btn-dark" (click)="openAddMedicineDialog()" *ngIf ="!xcelFuntionOn">Add Medicine</button>
+
+                    <button type="button" *ngIf ="!xcelFuntionOn" class="m-2 btn btn-dark" (click)="openXcelFunctions()">Import from an Xcel</button>
+                    <button type="button" class="m-2 btn btn-dark" (click)="openMedicinePage()" *ngIf ="xcelFuntionOn">Back To Medicine List</button>
+                  </div>
+              </div-->
+             
+
+              <div class="col-md-12 text-left mt-5" *ngIf="user.role.
+              doctor.medicine.create && xcelFuntionOn">  
+            
+
+              <div class="card bg-light mt-5">
+                <div class="card-header">Upload the Excel</div>
+                <div class="card-body">
+                  <label class="labelTitles mr-5"><b>The Excel File  </b></label>
+                  <input type="file"  (change)="captureXcelFile($event)" />
+
+                </div>
+                <!--div class="card-footer">Footer</div-->
+              </div>
+
+              </div>
+
+              
+
+              
+
+               <div class="scrolling-wrapper card bg-light mt-5" *ngIf="excelheader && excelheader.length>0 && xcelFuntionOn">
+                <label class="performMappingTitle m-2"> Perform the field mapping</label>
+                <div class="card-header">
+                
+                  <div class="row m-2">
+                    <div class="col-4">
+                          <label class="performMappingTitle">Your Excel File's Header Fields</label>
+
+                    </div>
+                    <div class="col-8">
+                      <label class="performMappingTitle"> This System's Recognisable Fields</label>
+
+
+
+                    </div>
+                  </div>
+
+                </div>
+                <div class="card-body">
+                  
+                    <div class="card-wrapper" *ngFor="let header of excelheader">
+                                              
+
+                            <div class="row m-2">
+                              <div class="col-4">
+                                    <label class="excelheaderTitle">{{header.xFileHeaderName}} </label>
+
+                              </div>
+                              <div class="col-8">
+                                
+                                    <select [(ngModel)]="header.fieldMapValue" class="form-control" (change)="onChangeFielMap(header)" name="fieldMap">
+                                        
+                                      <option  *ngFor="let predefineHeaderNameValue of predefineHeader"   value="{{predefineHeaderNameValue.fName}}" class="labelValue">{{predefineHeaderNameValue.fValue}}</option>
+                                    </select>
+
+                              </div>
+                            </div>
+
+                        
+                    </div>
+
+                <div class="card-footer">
+                     
+                     <button type="button" class="m-1 btn btn-dark text-right" (click)="EanbleImportButton()" *ngIf="notYetDoneMapping">Done With The Mapping</button>   
+
+                      <button type="button" class="m-1 btn btn-dark text-right" (click)="StartImport()" *ngIf ="!notYetDoneMapping">Start The Excel Data Import Now</button>   
+
+                  </div>
+              </div>
+               
+            </div>
+
+
+
+      <div *ngIf ="!xcelFuntionOn" class="card-body table-responsive marginLeft"> <span class="pb-3 "><b> List of existing {{userKind}}s </b>  </span>
+        <table class="table table-striped table-bordered table-sm" *ngIf="userKind == 'medicine'">
+          <thead>
+          <tr>
+            
+              <th>Name</th>
+              <th>MRP</th>
+              <th>B2B Price</th>
+              <th>GST</th>
+	            <th>VAT</th>
+              <!--th>Status</th-->
+              <th *ngIf="user.role.doctor.medicine.edit">Enable/Disable</th>
+              <th>Other Tax</th>
+              <th>Discounts</th>
+              <th>Medcine Type</th>
+              <th>Category</th>
+              <th *ngIf="user.role.doctor.medicine.edit">Edit</th>
+              
+          </tr>
+          </thead>
+          <tbody>
+              <tbody *ngIf="normalFiltereduserListArr && normalFiltereduserListArr.length>0">
+            
+              <tr *ngFor="let obj of normalFiltereduserListArr | paginate: { id:'formedicine', itemsPerPage: pageSize, currentPage: pageNo, totalItems: totalMedicineRecords }">              
+                
+              <td> {{obj?.name}} </td>
+              <td>{{obj.mrp}}</td>
+              <td>{{obj.b2bPrice}}</td>
+              <td>{{obj.gst}}</td>
+              <td>{{obj.vat}}</td>
+            
+              <!--td *ngIf="user.role.doctor.medicine.edit"> 
+                <span  *ngIf="obj.active">Enabled</span>
+                <span *ngIf="!obj.active">Disabled</span>
+            </td-->
+
+              <td *ngIf="user.role.doctor.medicine.edit">               
+                <ui-switch [(ngModel)]="obj.active" (change)="updateStatus($event, obj)"></ui-switch>
+                    
+              </td>
+              <td>{{obj.otherTax}}</td>
+              <td>{{obj.discounts}}</td>
+              <td>{{obj.medicineType}}</td>
+              <td>{{obj?.categoryObj?.catValue}}</td>
+<td *ngIf="user.role.doctor.medicine.edit" ><button class="btn btn-dark" (click)="openForeditMedicine(obj)"> Edit </button></td>    
+            </tr>
+          </tbody>
+          <div class="col-md-12 text-left clearfix ">
+          <pagination-controls class="my-pagination marginLeft" *ngIf="userKind=='medicine'" id="formedicine" 
+               (pageChange)="pageChanged($event)"
+                      (pageBoundsCorrection)="pageChanged($event)"                      
+                      directionLinks="true"               maxSize="9"
+                      directionLinks="true"
+                      autoHide="true"
+                      responsive="true"
+                      previousLabel="Prev"
+                      nextLabel="Next"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page"></pagination-controls >
+          </div>
+          <tbody *ngIf="(normalFiltereduserListArr && normalFiltereduserListArr.length==0)">
+              <tr>
+                <td colspan="7" align = "center">No record available</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+
+
+</div>
+
+      <ng-template #medicineFormModal let-close="close">
+        <form [formGroup]="medicineFormGroup" class="custom_timebox p-0">
+            <div class="modal-header py-1">
+                    <h4 class="modal-title headerTitle mb-0">{{mode | titlecase}} Medicine</h4>
+                    <button type="button" class="close" (click)="closeModal();">×</button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label for="name" class="labelTitles"><b>Name</b></label><span class="required-asterisk">*</span>
+                    </div>
+                    <div class="col-md-12 marginTop">
+                        <input class="form-control labelValue" [(ngModel)]="medicineObject.name"  formControlName="name" placeholder="Enter name">
+                    </div>
+                </div>
+
+                
+                
+
+                  
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="name" class="labelTitles"><b>MRP</b></label><span class="required-asterisk">*</span>
+                        </div>
+                        <div class="col-md-12 marginTop">
+                            <input class="form-control labelValue" [(ngModel)]="medicineObject.mrp"  formControlName="mrp" placeholder="Enter mrp">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12 form-group">
+                          <label for="name" class="labelTitles"><b>B2B Price</b></label><span class="required-asterisk">*</span>
+                      </div>
+                      <div class="col-md-12 marginTop">
+                          <input class="form-control labelValue" [(ngModel)]="medicineObject.b2bPrice"  formControlName="b2bPrice" placeholder="B2B Price">
+                      </div>
+                  </div>
+
+                      
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="name" class="labelTitles"><b>Gst</b></label><span class="required-asterisk">*</span>
+                            </div>
+                            <div class="col-md-12 marginTop">
+                                <input class="form-control labelValue" [(ngModel)]="medicineObject.gst"  formControlName="gst" placeholder="Enter gst">
+                            </div>
+                        </div>
+  
+  
+             
+                        
+
+                        
+                          <div class="row">
+                              <div class="col-md-12 form-group">
+                                  <label for="name" class="labelTitles"><b>HSN Code</b></label><span class="required-asterisk">*</span>
+                              </div>
+                              <div class="col-md-12 marginTop">
+                                  <input class="form-control labelValue" [(ngModel)]="medicineObject.hsnCode"  formControlName="hsnCode" placeholder="Enter hsnCode">
+                              </div>
+                          </div>
+    
+    
+             
+                        
+                          <!--div class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="name" class="labelTitles"><b>Vat</b></label><span class="required-asterisk">*</span>
+                            </div>
+                            <div class="col-md-12 marginTop">
+                                <input class="form-control labelValue" [(ngModel)]="medicineObject.vat"  formControlName="vat" placeholder="Enter vat">
+                            </div>
+                        </div-->
+  
+  
+                          
+
+                          
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="name" class="labelTitles"><b>Discounts</b></label>
+                                </div>
+                                <div class="col-md-12 marginTop">
+                                    <input class="form-control labelValue" [(ngModel)]="medicineObject.discounts"  formControlName="discounts" placeholder="Enter discounts">
+                                </div>
+                            </div>
+      
+      
+             
+                            
+                            
+                              <div class="row">
+                                  <div class="col-md-12 form-group">
+                                      <label for="name" class="labelTitles"><b>Other Tax</b></label>
+                                  </div>
+                                  <div class="col-md-12 marginTop">
+                                      <input class="form-control labelValue" [(ngModel)]="medicineObject.otherTax"  formControlName="otherTax" placeholder="Enter otherTax">
+                                  </div>
+                              </div>
+        
+        
+             
+                              
+
+
+
+                            
+                              <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label for="name" class="labelTitles"><b>Medicine Type</b></label>
+                                </div>
+                                <div class="col-md-12 marginTop">
+                                    <input class="form-control labelValue" [(ngModel)]="medicineObject.medicineType"  formControlName="medicineType" placeholder="Enter medicineType">
+                                </div>
+                            </div>
+      
+      
+             <!--
+        <div class="row">
+          <div class="col-md-12">
+              <div class="form-group">
+                  <label class="labelTitles">Medicine Type </label>
+                  <div>
+                  <select formControlName="medicineType"  [(ngModel)]="medicineObject.medicineType"  class="form-control" name="medicineType"
+                      >                         
+                      <option value="Tablet" class="labelValue">Tablet</option>
+                      <option value="Syrup" class="labelValue">Syrup</option>
+                                            
+                  </select>
+                </div>
+                 
+              </div>
+          </div>
+      </div>
+          -->
+
+            <div class="row">
+              <div class="col-md-12 form-group">
+                  <label for="name" class="labelTitles"><b>Category</b></label>
+              </div>
+              <div class="col-md-12 marginTop">
+                 <select formControlName="category" [(ngModel)]="medicineObject.category" class="form-control" name="category">
+                                        
+                  <option *ngFor="let cat of catList" value="{{cat._id}}" class="labelValue">{{cat.catValue}}</option>
+                </select>
+              </div>
+            </div>
+            
+
+
+
+             </div>
+             <div class="modal-footer">
+                <button [disabled]="!medicineFormGroup.valid" type="button" class="btn btn-primary m-10"
+                    (click)="save();">Save</button>
+                <button type="button" class="btn btn-primary m-10" (click)="closeModal();">Cancel</button>
+            </div>
+        </form>
+        <p *ngIf="submitAttempt" class="cutomeerrortext">
+                
+         <span class="redcolor ml-2"><i class="fa fas fa-exclamation"></i><b>&nbsp;Fix The Error : </b></span> {{form_fill_failure_msg}}
+          
+        </p>
+</ng-template>
+
+
+<ng-template #emptycellValuesAlert let-close="close">
+  <div class="modal-header" >
+    <button type="button" class="close no-focus" aria-label="Close" (click)="forceImport();">
+      <span class="no-focus" aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body usermngtable">
+      There are following problems found in your input Excel file,  <span class=" redColor largeFont ">NOTE: the rows containing the problems will be skipped during the import as these are required fields for this system. </span>
+     <br><br>
+      <b>The problem(s) </b>
+      <br>
+      <span class="extraMargin redColor">
+      {{errorText }}.
+      </span>
+      <br>
+      <span class="extraMargin">
+     <b> Do you still want to continue with the import? </b></span>
+  </div>
+  <div>
+      <button type="button" class="btn btn-primary m-20" (click)="forceImport();">
+         Yes
+      </button>
+      <button type="button" class="btn btn-primary m-20" (click)="closeFieldMappingErrorDialog();" >
+          No
+      </button>
+  </div>
+</ng-template>
+
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Bootstrap Modal</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Here I am!
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
+  </div>
+</ng-template>
+<!--jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination-->
+  
+<ng-template #searFiltersModal let-close="close">
+
+  <div class="modal-header py-1">
+          <h4 class="modal-title headerTitle mb-0">Search Filters</h4>
+          
+          <button type="button" class="close" (click)="closeSearchModal();">×</button>
+    </div>
+    <div class="modal-body">
+
+
+
+<div (click)="enableSearchByMedicine()" class="custombuttondiv">
+  <label class="customwid labelTitles">Medicine Name </label>
+  <span class="margincustom customwid">
+  <i class=" fa fa-arrow-down text-right" aria-hidden="true" *ngIf="searchByMedicineName" ></i>
+  <i class=" fa fa-arrow-up text-right" aria-hidden="true" *ngIf="!searchByMedicineName" ></i>
+</span>
+</div>
+      <div class="col-md-12" *ngIf="searchByMedicineName">
+        <ng-autocomplete 
+        [data]="medicineArray"
+        placeHolder="Type In Medicine Name Here"
+        [searchKeyword]="keywordMedicine"
+        (selected)='medicineSelectEvent($event)'
+        (inputChanged)='doctorMedcineSearch($event)'
+        
+        [itemTemplate]="itemTemplate"
+        [notFoundTemplate]="notFoundTemplate">                                 
+      </ng-autocomplete>
+   
+
+
+      <ng-template #itemTemplate id="itemTemplate" let-item>
+      <a [innerHTML]="item.name"></a>
+      </ng-template>
+
+      <ng-template #notFoundTemplate let-notFound>
+      <div [innerHTML]="notFound"></div>
+      </ng-template>
+
+      </div>
+
+
+<!--div class="col-md-12 mt-4 text-center"> 
+<button type="button" class="btn btn-dark" (click)="applyFilter()">Search Order</button>    
+</div-->
+
+    
+
+
+
+      
+
+
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-primary text-left" (click)="reset();">Reset</button>
+      <button  type="button" class="btn btn-primary "
+          (click)="searchByFilters();">Search</button>
+      <button type="button" class="btn btn-primary text-right" (click)="closeSearchModal();">Cancel</button>
+  </div>
+
+
+</ng-template>
+
+<div class="my-container">
+
+  <ng-template #customLoadingTemplate>
+    <div class="custom-class">
+        <h3>
+            {{loadingCustomeMsg}}
+        </h3>        
+    </div>
+</ng-template>
+
+  <ngx-loading [show]="loading" [template]="customLoadingTemplate"></ngx-loading>
+</div>
+
+
+
+
+
+

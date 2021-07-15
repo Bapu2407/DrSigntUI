@@ -1,0 +1,112 @@
+<nav class="sidebar">
+    <button type="button" class="leftrightarrowbutton btn btn-dark" (click)="expandSideBar()"> <span *ngIf="showSideBar"> >> </span>
+        <span *ngIf="!showSideBar"> << </span> </button>
+    <div class="list-group" [ngClass]="{ 'customClass': showSideBar }">
+        <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-dashboard"></i>&nbsp;Dashboard
+        </a>
+        <a *ngIf="user.role.doctor.doctor.view" routerLink="/activate-deactivate" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-user"></i>&nbsp;Doctor Management
+        </a>
+        <a routerLink="/user-create" class="list-group-item">
+            <i class="fa fa-fw fa-user"></i>&nbsp;User Management
+        </a>
+        <a  *ngIf="user.role.doctor.appointment.view" routerLink="/appointment" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-file-text-o"></i>&nbsp;Appointments
+        </a>
+        <a  *ngIf="user.role.doctor.location.view" routerLink="/location" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-map-marker"></i>&nbsp;Practice Location
+        </a>
+
+        <a  *ngIf="user.role.doctor.invoice.view" routerLink="/invoice" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-files-o"></i>&nbsp;Invoice
+        </a>
+       
+        <a  *ngIf="user.role.doctor.listdigitalmakt.view" routerLink="/listdigitalmakt" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-sitemap"></i>&nbsp;Digital Marketing
+        </a>
+       
+
+        <!--a routerLink="/settings" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-cog"></i>&nbsp;Settings
+        </a -->
+        
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="addExpandClass('yes')"  [routerLinkActive]="['router-link-active']">
+                <span><i class="fa fa-product-hunt"></i>&nbsp; CRM <b class="caret"></b></span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'yes'">
+                <ul class="submenu">
+                    <li *ngIf="user.role.doctor.customer && user.role.doctor.customer.view" >
+                        <a routerLink="/customer" [routerLinkActive]="['router-link-active']" >
+                            <span><i class="fa fa-clock-o"></i>&nbsp; Customers</span>
+                        </a>
+                    </li>
+                    <li *ngIf="user.role.doctor.order && user.role.doctor.order.view" >
+                        <a routerLink="/order" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-road"></i>&nbsp; Orders</span>
+                        </a>
+                    </li>
+                    <li *ngIf="user.role.doctor.category && user.role.doctor.category.view" >
+                        <a routerLink="/category" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-plus-square"></i>&nbsp; Medicine Categories</span>
+                        </a>
+                    </li>
+                    <li *ngIf="user.role.doctor.medicine && user.role.doctor.medicine.view" >
+                        <a routerLink="/medicine" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-medkit"></i>&nbsp; Medicine master</span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="user.role.doctor.delivery && user.role.doctor.delivery.view" >
+                        <a routerLink="/delivery" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-truck"></i>&nbsp; Shipping </span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="user.role.doctor.charges && user.role.doctor.charges.view" >
+                        <a routerLink="/charges" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-money"></i>&nbsp; Service Charges </span>
+                        </a>
+                    </li>
+                    <li *ngIf="user.role.doctor.discount && user.role.doctor.discount.view" >
+                        <a routerLink="/discount" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-money"></i>&nbsp; Discount </span>
+                        </a>
+                    </li>
+
+                    <li *ngIf="user.role.doctor.coupon && user.role.doctor.coupon.view" >
+                        <a routerLink="/coupon" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-gift"></i>&nbsp; Coupon </span>
+                        </a>
+                    </li>
+
+
+
+                    <li *ngIf="user.role.doctor.invoicecrm && user.role.doctor.invoicecrm.view" >
+                        <a routerLink="/invoicecrm" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-money"></i>&nbsp; Invoice CRM </span>
+                        </a>
+                    </li>
+<!--
+                    <li *ngIf="user.role.doctor.invoicecrm.view" >
+                        <a routerLink="/invoicecrm" [routerLinkActive]="['router-link-active']">
+                            <span><i class="fa fa-money"></i>&nbsp; Invoice CRM </span>
+                        </a>
+                    </li>
+
+                   -->
+                   
+                 </ul>
+          </li>
+        </div>
+
+        <a  [routerLinkActive]="['router-link-active']"  (click)="onLoggedout()" class="list-group-item">
+            <i class="fa fa-fw fa-power-off"></i> Log Out
+        </a>
+       
+        
+        
+            </div>
+</nav>
+

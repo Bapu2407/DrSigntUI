@@ -1,0 +1,471 @@
+<div>
+  <app-page-header [heading]="'User Add & Access Rights'" [icon]="'fa-qrcode'"></app-page-header>
+  <div class="row">
+    <!-- Add promo code -->
+    
+    <div class="col-md-12">
+        <div class="card mb-3">
+            <div class="card-header">
+              {{mode | titlecase}} User
+            </div>
+            <div class="card-body table-responsive">
+              <form [formGroup]="userGroup" class="custom_timebox p-0">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="from-group">
+                      <input type="text" class="form-control" [(ngModel)]="userObject.userName" formControlName="userName" name="username" placeholder="Enter User Name" />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="from-group">
+                      <input type="email" [class.is-invalid] = "userGroup.get('email').invalid && userGroup.get('email').touched" class="form-control" [(ngModel)]="userObject.email" formControlName="email" name="email" placeholder="Enter Email" />
+                    </div>
+                </div>
+                  <div class="col-md-3">
+                    <div class="from-group">
+                      <input type="password" class="form-control" [(ngModel)]="userObject.password" formControlName="password" name="password"  placeholder="Enter password" />
+                    </div>
+                  </div>
+
+                  <div class="col-md-3" >
+                    <div class="from-group">
+                      <button class="btn btn-dark" (click)="addUser()"> {{textSave}} </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+              <p *ngIf="submitAttempt" class="cutomeerrortext">
+                
+                <span class="redcolor ml-2"> <i class="fa fas fa-exclamation"></i><b>&nbsp;Fix The Error : </b></span> {{form_fill_failure_msg}}
+                 
+               </p>
+          </div>
+          </div>
+
+
+          <div *ngIf="mode=='edit' && user.role.doctor.user.edit " class="card p-3">
+              
+            <div class="row" >
+              <div class="col-md-2">                  
+                <div class="card mb-3">
+                  <div class="card-header">
+                      Module
+                  </div>
+                  <div class="from-group">
+                    <select [(ngModel)]="module" class="form-control"  name="userKind" (change)="moduleNameChange()" >
+                      <option selected value="doctor">Doctor</option>
+                      <!--option  value="patient">Patient</option-->                      
+                    </select>
+                  </div>
+                </div>
+              </div>    
+
+              <div class=" card col-md-2 ml-3">
+              <div class="form-group">
+                <label><b>User</b></label>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="role.doctor.user.create"> Create
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="role.doctor.user.view"> View
+                    </label>
+                </div>     
+                <div class="checkbox">
+                  <label>
+                      <input type="checkbox" [(ngModel)]="role.doctor.user.edit"> Edit 
+                  </label>
+              </div>                      
+            </div>
+          </div>
+          
+            <div class=" card col-md-2 ">
+              <div class="form-group">
+                <label><b>Doctor</b></label>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="role.doctor.doctor.create"> Create
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="role.doctor.doctor.view"> View 
+                    </label>
+                </div>  
+                <div class="checkbox">
+                  <label>
+                      <input type="checkbox" [(ngModel)]="role.doctor.doctor.edit"> Edit 
+                  </label>
+              </div>                  
+            </div>
+          
+          </div>
+          
+          </div>
+
+           <div class="row" >
+            <div class=" card col-md-2 ml-3">
+              <div class="form-group">
+                <label m-5><b>Appointment </b></label>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="role.doctor.appointment.create"> Create 
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="role.doctor.appointment.view"> View 
+                    </label>
+                </div> 
+                <div class="checkbox">
+                  <label>
+                      <input type="checkbox" [(ngModel)]="role.doctor.appointment.edit"> Edit 
+                  </label>
+              </div>                  
+              <div class="checkbox">
+                <label>
+                    <input type="checkbox" [(ngModel)]="role.doctor.appointment.statuschange"> Status Change 
+                </label>
+            </div>    
+            </div>
+          </div>
+          
+            <div class=" card col-md-2 ">
+              <div class="form-group">
+                <label ><b>Invoice </b></label>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="role.doctor.invoice.create"> Create
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="role.doctor.invoice.view"> View
+                    </label>
+                </div>     
+                <div class="checkbox">
+                  <label>
+                      <input type="checkbox" [(ngModel)]="role.doctor.invoice.edit"> Edit
+                  </label>
+              </div>                  
+            </div>
+          
+          </div>
+
+          <div class=" card col-md-2">
+            <div class="form-group">
+              <label><b>Practice Location </b></label>
+              <div class="checkbox">
+                  <label>
+                      <input type="checkbox" [(ngModel)]="role.doctor.location.create"> Create
+                  </label>
+              </div>
+              <div class="checkbox">
+                  <label>
+                      <input type="checkbox" [(ngModel)]="role.doctor.location.view"> View
+                  </label>
+              </div>      
+              <div class="checkbox">
+                <label>
+                    <input type="checkbox" [(ngModel)]="role.doctor.location.edit"> Edit
+                </label>
+            </div>                  
+          </div>
+        
+        </div>
+
+        <div class=" card col-md-2 ">
+          <div class="form-group">
+            <label ><b>Customer </b></label>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" [(ngModel)]="role.doctor.customer.create"> Create
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" [(ngModel)]="role.doctor.customer.view"> View
+                </label>
+            </div>     
+            <div class="checkbox">
+              <label>
+                  <input type="checkbox" [(ngModel)]="role.doctor.customer.edit"> Edit
+              </label>
+          </div>                  
+        </div>
+      
+      </div>
+      <div class=" card col-md-2 ">
+        <div class="form-group">
+          <label ><b>Order </b></label>
+          <div class="checkbox">
+              <label>
+                  <input type="checkbox" [(ngModel)]="role.doctor.order.create"> Create
+              </label>
+          </div>
+          <div class="checkbox">
+              <label>
+                  <input type="checkbox" [(ngModel)]="role.doctor.order.view"> View
+              </label>
+          </div>     
+          <div class="checkbox">
+            <label>
+                <input type="checkbox" [(ngModel)]="role.doctor.order.edit"> Edit
+            </label>
+        </div>                  
+      </div>
+    
+    </div>
+    <div class=" card col-md-2 ">
+      <div class="form-group">
+        <label ><b>Medicine </b></label>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" [(ngModel)]="role.doctor.medicine.create"> Create
+            </label>
+        </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" [(ngModel)]="role.doctor.medicine.view"> View
+            </label>
+        </div>     
+        <div class="checkbox">
+          <label>
+              <input type="checkbox" [(ngModel)]="role.doctor.medicine.edit"> Edit
+          </label>
+      </div>                  
+    </div>
+  
+  </div>
+
+  <div class=" card col-md-2 ">
+    <div class="form-group">
+      <label ><b>Medicine Category</b></label>
+      <div class="checkbox">
+          <label>
+              <input type="checkbox" [(ngModel)]="role.doctor.category.create"> Create
+          </label>
+      </div>
+      <div class="checkbox">
+          <label>
+              <input type="checkbox" [(ngModel)]="role.doctor.category.view"> View
+          </label>
+      </div>     
+      <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.category.edit"> Edit
+        </label>
+    </div>                  
+  </div>
+
+</div>
+
+
+<div class=" card col-md-2 ">
+  <div class="form-group">
+    <label ><b>Shipping </b></label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.delivery.create"> Create
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.delivery.view"> View
+        </label>
+    </div>     
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" [(ngModel)]="role.doctor.delivery.edit"> Edit
+      </label>
+  </div>                  
+</div>
+
+</div>
+
+<div class=" card col-md-2 ">
+  <div class="form-group">
+    <label ><b>Service Charges </b></label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.charges.create"> Create
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.charges.view"> View
+        </label>
+    </div>     
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" [(ngModel)]="role.doctor.charges.edit"> Edit
+      </label>
+  </div>                  
+</div>
+
+</div>
+
+<div class=" card col-md-2 ">
+  <div class="form-group">
+    <label ><b>Discount </b></label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.discount.create"> Create
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.discount.view"> View
+        </label>
+    </div>     
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" [(ngModel)]="role.doctor.discount.edit"> Edit
+      </label>
+  </div>                  
+</div>
+
+</div>
+
+
+<div class=" card col-md-2 ">
+  <div class="form-group">
+    <label ><b>Coupon </b></label>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.coupon.create"> Create
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.coupon.view"> View
+        </label>
+    </div>     
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" [(ngModel)]="role.doctor.coupon.edit"> Edit
+      </label>
+  </div>                  
+</div>
+
+</div>
+<div class=" card col-md-2 ">
+  <div class="form-group">
+    <label ><b>Invoice CRM </b></label>
+    <!--div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.invoicecrm.create"> Create
+        </label>
+    </div-->
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.invoicecrm.view"> View
+        </label>
+    </div>     
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" [(ngModel)]="role.doctor.invoicecrm.edit"> Edit
+      </label>
+  </div>                  
+</div>
+
+</div>
+
+<div class=" card col-md-2 ">
+  <div class="form-group">
+    <label ><b>Digital Marketing </b></label>
+    <!--div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.invoicecrm.create"> Create
+        </label>
+    </div-->
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" [(ngModel)]="role.doctor.listdigitalmakt.view"> View
+        </label>
+    </div>     
+    
+</div>
+
+</div>
+
+          
+           </div>
+
+           <div class="row" >
+            <div class="col-md-6 mt-3">
+              <div class="from-group">
+                <button class="btn btn-dark" (click)="modifyUser()"> Save </button>
+              </div>
+            </div>
+          
+            <div class="col-md-6 mt-3">
+              <div class="from-group">
+                <button class="btn btn-dark" (click)="cancelEdit()"> Done </button>
+              </div>
+            </div>
+            
+           </div>
+
+        </div>
+        </div>
+        
+        
+      </div>
+
+
+             
+
+<div class="card-body table-responsive m-1">
+  <table class="table table-striped table-bordered table-sm">
+    <thead>
+    <tr>
+        <th>UserName</th>
+        <th>Email</th>        
+        <th>Password</th>        
+        <th>Status</th>  
+        <th *ngIf="user.role.doctor.user.edit">Enable/Disable</th>        
+        <th>Created Date</th>
+        <th *ngIf="user.role.doctor.user.edit">Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tbody *ngIf="normalFiltereduserListArr && normalFiltereduserListArr.length>0">
+      
+        <tr *ngFor="let acc of normalFiltereduserListArr | paginate: { id:'foruser', itemsPerPage: pageSize, currentPage: pageNo, totalItems: totalUserRecords }">              
+        <td> {{acc?.userName}} </td>
+        <td>{{acc.email}}</td>        
+        <td>{{acc.password}}</td>
+        <td> 
+          <span  *ngIf="acc.active">Enabled</span>
+          <span *ngIf="!acc.active">Disabled</span>
+      </td>
+        <td *ngIf="user.role.doctor.user.edit">               
+          <ui-switch   [(ngModel)]="acc.active" (change)="updateUserStatus($event,acc)"></ui-switch>
+              
+        </td>        
+    <td >{{convertToHumanDate(acc.createdDate)}}</td>
+      <td *ngIf="user.role.doctor.user.edit" ><button class="btn btn-dark" (click)="openForeditUser(acc)"> Edit </button></td>
+      </tr>
+    </tbody>
+    <pagination-controls class="my-pagination mt-3"  id="foruser" 
+         (pageChange)="pageChanged($event)"
+                (pageBoundsCorrection)="pageChanged($event)"                      
+                directionLinks="true"                      
+                responsive="true"
+                previousLabel="Previous"
+                nextLabel="Next"
+                screenReaderPaginationLabel="Pagination"
+                screenReaderPageLabel="page"
+                screenReaderCurrentLabel="You're on page"></pagination-controls >
+    <tbody *ngIf="(normalFiltereduserListArr && normalFiltereduserListArr.length==0)">
+        <tr>
+          <td colspan="7" align = "center">No record available</td>
+        </tr>
+      </tbody>
+  </table>
+</div>
+

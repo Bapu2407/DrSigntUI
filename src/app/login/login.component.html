@@ -1,0 +1,31 @@
+<div class="login-page" [@routerTransition]>
+    <div class="row justify-content-md-center">
+        <div class="col-md-4">
+<!--            <img src="assets/images/cc-logo-white-orange-horizontal.xp.png" width="150px" class="user-avatar" /> SOME CIRCLE OUTLINE JUNK -->
+            <img src="assets/images/logo_signet.png" width="150px" />
+            <h1>Admin Portal</h1>
+            <form role="form">
+                <div class="form-content">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="email"   name="email" class="form-control input-underline input-lg" id="email" placeholder="Email">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" [(ngModel)]="password" name="password" class="form-control input-underline input-lg" id="password" placeholder="Password">
+                    </div>
+                </div>
+                <p class="marginTop">
+                    <a class="btn rounded-btn" (click)="onLoggedin()"> Log in </a>
+                    <!-- <a class="btn rounded-btn" [routerLink]="['/dashboard']" (click)="onLoggedin()"> Log in </a> -->
+                    <!--
+                    &nbsp;
+                    <a class="btn rounded-btn" [routerLink]="['/signup']">Register</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Pre loader -->
+<div class="my-container">
+    <ngx-loading [show]="loading"></ngx-loading>
+</div>

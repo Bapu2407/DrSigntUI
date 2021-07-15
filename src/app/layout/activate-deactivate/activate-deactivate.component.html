@@ -1,0 +1,355 @@
+<div>
+  <app-page-header [heading]="'Doctors'" [icon]="'fa-user'"></app-page-header>
+</div>
+
+  <div class="col-md-12" >
+      
+          <!--div class="card-header">
+              User type
+          </div-->
+          
+          
+                
+                <div class="col-md-12 text-right " *ngIf="user.role.doctor.doctor.create">                      
+                  <div class="content">
+                    <button type="button" class="btn btn-dark" (click)="openAddDoctorDialog()">Add Doctor</button>
+                  </div>
+              </div>
+             
+          
+          
+      
+
+
+<!--div class="row m-1">  
+  
+  <div class="col col-xl-12 col-lg-12">
+    <div class="card mb-3">
+      <div class="card-header">
+        List of {{userKind}}
+    </div>
+  </div>
+</div>
+</div -->
+
+      <div class="card-body table-responsive marginLeft"> <span class="pb-3 "><b> List of existing {{userKind}}s </b>  </span>
+        <table class="table table-striped table-bordered table-sm" *ngIf="userKind == 'doctor'">
+          <thead>
+          <tr>
+            <th>Doctor ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+	            <th>Password</th>
+              <!--th>Status</th-->
+              <th *ngIf="user.role.doctor.doctor.edit">Enable/Disable</th>
+              <th>Speciality</th>
+              <th>Created Date</th>
+              <th *ngIf="user.role.doctor.doctor.edit">Edit</th>
+          </tr>
+          </thead>
+          <tbody>
+              <tbody *ngIf="normalFiltereduserListArr && normalFiltereduserListArr.length>0">
+            
+              <tr *ngFor="let obj of normalFiltereduserListArr | paginate: { id:'fordoctor', itemsPerPage: pageSize, currentPage: pageNo, totalItems: totalDocRecords }">              
+                <td> {{obj?._id}} </td>
+              <td> {{obj?.name}} </td>
+              <td>{{obj.emailId}}</td>
+              <td>{{obj.mobileNumber}}</td>
+              <td>{{obj.password}}</td>
+              <!--td *ngIf="user.role.doctor.doctor.edit"> 
+                <span  *ngIf="obj.active">Enabled</span>
+                <span *ngIf="!obj.active">Disabled</span>
+            </td-->
+              <td *ngIf="user.role.doctor.doctor.edit">               
+                <ui-switch [(ngModel)]="obj.active" (change)="updateStatus($event, obj)"></ui-switch>
+                    
+              </td>
+              <td>{{obj.practiceCategory}}</td>
+<td >{{convertToHumanDate(obj.createdDate)}}</td>
+<td *ngIf="user.role.doctor.doctor.edit" ><button class="btn btn-dark" (click)="openForeditDoctor(obj)"> Edit </button></td>    
+            </tr>
+          </tbody>
+          <div class="col-md-12 text-left clearfix ">
+          <pagination-controls class="my-pagination marginLeft" *ngIf="userKind=='doctor'" id="fordoctor" 
+               (pageChange)="pageChanged($event)"
+                      (pageBoundsCorrection)="pageChanged($event)"                      
+                      directionLinks="true"               maxSize="9"
+                      directionLinks="true"
+                      autoHide="true"
+                      responsive="true"
+                      previousLabel="Prev"
+                      nextLabel="Next"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page"></pagination-controls >
+          </div>
+          <tbody *ngIf="(normalFiltereduserListArr && normalFiltereduserListArr.length==0)">
+              <tr>
+                <td colspan="7" align = "center">No record available</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-striped table-bordered table-sm" *ngIf="userKind=='patient'">
+          <thead>
+          <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Status</th>
+              <th>Enable/Disable</th>
+              <th *ngIf="user.role.doctor.doctor.edit">Edit</th>
+              
+          </tr>
+          </thead>
+          <tbody>
+              <tbody *ngIf="normalFiltereduserListArr && normalFiltereduserListArr.length>0">
+            
+              <tr *ngFor="let patientObj of normalFiltereduserListArr | paginate: { id:'forpatient', itemsPerPage: pageSize, currentPage: pageNo, totalItems: totalPatientRecords }">              
+              <td> {{patientObj?.name}} </td>
+              <td>{{patientObj.emailId}}</td>
+              <td>{{patientObj.emailId}}</td>
+              <td> 
+                <span  *ngIf="patientObj.active">Enabled</span>
+                <span *ngIf="!patientObj.active">Disabled</span>
+              </td>
+              <td>               
+                <ui-switch [(ngModel)]="patientObj.active" (change)="updateStatus($event, patientObj)"></ui-switch>                    
+              </td>        
+              <td *ngIf="user.role.doctor.doctor.edit" ><button class="btn btn-dark" (click)="openForeditDoctor(patientObj)"> Edit </button></td>    
+            </tr>
+          </tbody>
+          <pagination-controls class="my-pagination" *ngIf="userKind=='patient'" id="forpatient"
+              (pageChange)="pageChanged($event)"
+              (pageBoundsCorrection)="pageChanged($event)"                    
+                      directionLinks="true"                      
+                      responsive="true"
+                      previousLabel="Previous"
+                      nextLabel="Next"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page"></pagination-controls>
+
+          <tbody *ngIf="(normalFiltereduserListArr && normalFiltereduserListArr.length==0)">
+              <tr>
+                <td colspan="7" align = "center">No record available</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+   
+
+
+
+      <ng-template #doctorFormModal let-close="close">
+        <form [formGroup]="doctorFormGroup" class="custom_timebox p-0">
+            <div class="modal-header py-1">
+                    <h4 class="modal-title headerTitle mb-0">{{mode | titlecase}} Doctor</h4>
+                    <button type="button" class="close" (click)="closeModal();">×</button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label for="name" class="labelTitles"><b>Name</b></label>
+                    </div>
+                    <div class="col-md-12 marginTop">
+                        <input class="form-control labelValue" [(ngModel)]="doctorObject.name"  formControlName="name" placeholder="Enter name">
+                    </div>
+                </div>
+
+                <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="email" class="labelTitles"><b>Email</b></label>
+                        </div>
+                        <div class="col-md-12 marginTop">
+                                <input type="email"  [class.is-invalid] = "doctorFormGroup.get('emailId').invalid && doctorFormGroup.get('emailId').touched" class="form-control" [(ngModel)]="doctorObject.emailId" formControlName="emailId"
+                                placeholder="Enter email">
+                         </div>
+                    </div>
+                <div class="row">
+                      <div class="col-md-12 form-group">
+                          <label for="email" class="labelTitles"><b>Password</b></label>
+                      </div>
+                      <div class="col-md-12 marginTop">
+                              <input type="password" class="form-control" [(ngModel)]="doctorObject.password" formControlName="password"
+                              placeholder="Enter password">
+                       </div>
+                </div>
+
+                <div class="row ">
+                  <div class="col-md-12 form-group">
+                      <label for="email" class="labelTitles"><b>Date Of Birth</b></label>
+                  </div>
+                  <div class="col-md-12 marginTop">
+                          <input type="date" class="form-control" [(ngModel)]="doctorObject.dateOfBirth" formControlName="dateOfBirth"
+                          placeholder="Enter DOB">
+                          
+                   </div>
+            </div>
+
+
+
+        <div style="border: 0; padding: 10;" class="row marginTop">
+          <div class="col-md-12 form-group">
+            <label for="email" class="labelTitles"><b>Demographic Photo</b></label>
+        </div>
+          <div class="col-md-12 form-group marginTop" >
+          
+          <div class="profile-image-wrapper"  >
+            <div class="profile-image" [style.backgroundImage]="getPhoto('demographic')">
+              <span class="edit-icon" (click)="capturePhoto(null,'demographic')">
+                <!--
+                <i class="fa fa-plus" aria-hidden="true" *ngIf="mode=='add'" ></i>
+                <i class="fa fa-pencil-square-o" *ngIf="mode=='edit'" aria-hidden="true" ></i>
+               -->
+              </span>
+            </div>
+          </div>
+          <input type="file"  (change)="capturePhoto($event,'demographic')" />
+        </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 form-group">
+              <label for="name" class="labelTitles">Issuing Authority</label>
+          </div>
+          <div class="col-md-12 marginTop">
+              <input class="form-control labelValue" formControlName="issueingAuthority" placeholder="Enter issueingAuthority">
+          </div>
+      </div>
+
+      <div style="border: 0; padding: 10;" class="row marginTop">
+        <div class="col-md-12 form-group">
+          <label for="email" class="labelTitles"><b>Professional Photo</b></label>
+      </div>
+        <div class="col-md-12 form-group marginTop" >
+        
+        <div class="profile-image-wrapper"  >
+          <div class="profile-image" [style.backgroundImage]="getPhoto('profesional')">
+            <span class="edit-icon" (click)="capturePhoto(null,'profesional')">
+              <!--
+              <i class="fa fa-plus" aria-hidden="true" *ngIf="mode=='add'" ></i>
+              <i class="fa fa-pencil-square-o" *ngIf="mode=='edit'" aria-hidden="true" ></i>
+              -->             
+            </span>
+          </div>
+        </div>
+        <input type="file" (change)="capturePhoto($event,'profesional')" />
+      </div>
+      </div>
+
+      <div class="row ">
+        <div class="col-md-12 form-group">
+            <label for="email" class="labelTitles"><b>Issuing Date </b></label>
+        </div>
+        <div class="col-md-12 marginTop">
+                <input type="date" class="form-control" [(ngModel)]="doctorObject.issueingDate" formControlName="issueingDate"
+                placeholder="Enter issueingDate">
+                
+         </div>
+  </div>
+
+  
+  <div class="row ">
+    <div class="col-md-12 form-group">
+        <label for="email" class="labelTitles"><b>Valid Till  </b></label>
+    </div>
+    <div class="col-md-12 marginTop">
+            <input type="date" class="form-control" [(ngModel)]="doctorObject.validTill" formControlName="validTill"
+            placeholder="Enter validTill">
+            
+     </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 form-group">
+      <label for="name" class="labelTitles"><b>Registered Address</b></label>
+  </div>
+  <div class="col-md-12 marginTop">
+      <input class="form-control labelValue" [(ngModel)]="doctorObject.registeredAddress"  formControlName="registeredAddress" placeholder="Enter registeredAddress">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 form-group">
+      <label for="name" class="labelTitles"><b>Practice Category</b></label>
+  </div>
+  <div class="col-md-12 marginTop">
+      <input class="form-control labelValue" [(ngModel)]="doctorObject.practiceCategory"  formControlName="practiceCategory" placeholder="Enter practiceCategory">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 form-group labelTitles">
+      <label for="name" class="labelTitles">Degree Diploma</label>
+  </div>
+  <div class="col-md-12 marginTop">
+      <input class="form-control labelValue" [(ngModel)]="doctorObject.degreeDiploma"  formControlName="degreeDiploma" placeholder="Enter DegreeDiploma">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 form-group labelTitles">
+      <label for="name" class="labelTitles">General Practice</label>
+  </div>
+  <div class="col-md-12 marginTop">
+      <input class="form-control labelValue" [(ngModel)]="doctorObject.generalPractice"  formControlName="generalPractice" placeholder="Enter generalPractice">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 form-group labelTitles">
+      <label for="name" class="labelTitles">Professional Practice Experience</label>
+  </div>
+  <div class="col-md-12 marginTop">
+      <input class="form-control labelValue" [(ngModel)]="doctorObject.professionalPracticeExperience"  formControlName="professionalPracticeExperience" placeholder="Enter ProfessionalPracticeExperience">
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12 form-group labelTitles">
+      <label for="name" class="labelTitles">Current PracticeInformation</label>
+  </div>
+  <div class="col-md-12 marginTop">
+      <input class="form-control labelValue" [(ngModel)]="doctorObject.currentPracticeInformation"  formControlName="currentPracticeInformation" placeholder="Enter CurrentPracticeInformation">
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12 form-group labelTitles">
+      <label for="name" class="labelTitles">Doctor RegistrationInformation</label>
+  </div>
+  <div class="col-md-12 marginTop">
+      <input class="form-control labelValue" [(ngModel)]="doctorObject.doctorRegistrationInformation"  formControlName="doctorRegistrationInformation" placeholder="Enter doctorRegistrationInformation">
+  </div>
+</div>
+
+             </div>
+             <div class="modal-footer">
+                <button [disabled]="!doctorFormGroup.valid" type="button" class="btn btn-primary m-10"
+                    (click)="save();">Save</button>
+                <button type="button" class="btn btn-primary m-10" (click)="closeModal();">Cancel</button>
+            </div>
+        </form>
+        <p *ngIf="submitAttempt" class="cutomeerrortext">
+                
+         <span class="redcolor ml-2"><i class="fa fas fa-exclamation"></i><b>&nbsp;Fix The Error : </b></span> {{form_fill_failure_msg}}
+          
+        </p>
+</ng-template>
+
+<!--jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination-->
+
+<!--div class="my-container">
+  <ngx-loading [show]="loading"></ngx-loading>
+</div-->
+
+
+
+
+
+

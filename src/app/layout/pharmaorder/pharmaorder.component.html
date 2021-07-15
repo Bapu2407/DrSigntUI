@@ -1,0 +1,332 @@
+<div>
+  <app-page-header [heading]="'Order'" [icon]="'fa-user'"></app-page-header>
+</div>
+<div class="row">
+  <div class="col-md-12" *ngIf="user.role.doctor.order.create">                          
+      <button type="button" class="btn btn-dark" (click)="openforAddPharmOrderDialog()">Add Order</button>
+      <button type="button" class="ml-4 btn btn-dark" (click)="gotoCustomerPage()">Add Customer</button>
+      <button type="button" *ngIf="fromCustomerPage" class="ml-4 btn btn-dark" (click)="openCustomerPage()">Go Back</button>
+</div>
+</div>
+
+<div class="card-body table-responsive marginLeft"> <span class="pb-3 "><b> List of existing {{userKind}}s </b> </span>
+  <table class="table table-bordered table-sm">
+    <thead>
+      <tr>
+        <th>Order Id </th>
+        <th>Customer Name</th>
+        <th>Medicine Details</th>
+
+        <th>Status</th>
+        <th *ngIf="user.role.doctor.order.edit">Enable/Disable</th>
+        <th>Created Date</th>
+        <th *ngIf="user.role.doctor.order.edit">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tbody *ngIf="normalFiltereduserListArr && normalFiltereduserListArr.length>0">
+
+      <tr class="{{obj.status | lowercase}}"
+        *ngFor="let obj of normalFiltereduserListArr | paginate: { id:'fororder1', itemsPerPage: pageSize, currentPage: pageNo, totalItems: totalDocRecords }">
+
+        <td>{{obj?._id}}</td>
+        <td>{{obj?.customer?.name}}</td>
+        <td>
+
+          <table class='table borderless'>
+            <tr class="{{obj.status | lowercase}}" *ngFor="let med of obj.medicineList">
+              <td class="customdiv"><b>Name:</b></td>
+              <td>{{med?.medicineName}}</td>
+              <td>/</td>
+              <td class="customdiv"><b>Qty:</b></td>
+              <td>{{med?.quantity}}</td>
+              <!--td>/</td><td class="customdiv"><b>Mg:</b></td><td>{{med?.mg}}</td-->
+            </tr>
+
+          </table>
+
+        </td>
+
+        <td>{{obj?.status}}</td>
+        <!--td *ngIf="user.role.doctor.order.edit"> 
+                <span  *ngIf="obj.active">Enabled</span>
+                <span *ngIf="!obj.active">Disabled</span>
+            </td-->
+        <td *ngIf="user.role.doctor.order.edit">
+          <ui-switch [(ngModel)]="obj.active" (change)="updateStatus($event, obj)"></ui-switch>
+
+        </td>
+        <td>{{convertToHumanDate(obj.createdDate)}}</td>
+        <!-- [disabled]="obj.status=='Confirmed'"-->
+        <td *ngIf="user.role.doctor.order && user.role.doctor.order.edit"><button class="btn btn-dark"
+            (click)="openForeditPharmaOrder(obj)" [disabled]="obj.status=='Confirmed'"> Edit </button></td>
+
+      </tr>
+    </tbody>
+    <div class="col-md-12 text-left clearfix ">
+      <pagination-controls class="my-pagination marginLeft" id="fororder1" (pageChange)="pageChanged($event)"
+        (pageBoundsCorrection)="pageChanged($event)" directionLinks="true" maxSize="9" directionLinks="true"
+        autoHide="true" responsive="true" previousLabel="Prev" nextLabel="Next" screenReaderPaginationLabel="Pagination"
+        screenReaderPageLabel="page" screenReaderCurrentLabel="You're on page"></pagination-controls>
+    </div>
+    <tbody *ngIf="(normalFiltereduserListArr && normalFiltereduserListArr.length==0)">
+      <tr>
+        <td colspan="7" align="center">No record available</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+<ng-template #orderFormModal let-close="close">
+
+  <form [formGroup]="pharmaorderFormGroup" class="custom_timebox p-0">
+    <div class="modal-header py-1">
+      <h4 class="modal-title headerTitle mb-0">{{mode | titlecase}} Order</h4>
+      <button type="button" class="close" (click)="closeMainModal();">×</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="row m-4" *ngIf="mode=='add'">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="labelTitles">Select Customer </label>
+
+            <ng-autocomplete [data]="customerList" [(ngModel)]="customerName" [searchKeyword]="keywordCustomer"
+              (selected)='customerSelectEvent($event)' (inputChanged)='onChangeCustomerSearch($event)'
+              [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+            </ng-autocomplete>
+
+
+            <ng-template #itemTemplate id="itemTemplate" let-item>
+              <a [innerHTML]="item.name"></a>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+              <div [innerHTML]="notFound"></div>
+            </ng-template>
+
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="labelTitles">Status </label>
+            <div *ngIf="mode=='edit'">
+              <select (change)="checkStatusChange()" #myname formControlName="status" [(ngModel)]="pharmaorderObject.status"
+                class="form-control" name="status">
+                <option value="OrderPlaced" class="labelValue">OrderPlaced</option>
+                <option value="Confirmed" class="labelValue">Confirmed</option>
+                <option value="Packaged" class="labelValue">Packaged</option>
+                <option value="Shipped" class="labelValue">Shipped</option>
+                <option value="Rejected" class="labelValue">Rejected</option>
+              </select>
+            </div>
+            <div *ngIf="mode=='add'">
+              <input class="form-control labelValue" disabled [(ngModel)]="pharmaorderObject.status" formControlName="status"
+                placeholder="OrderPlaced">
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label class="labelTitles">Delivery Mode </label>
+
+            <select formControlName="deliveryMode" class="form-control" name="deliveryMode"
+              [(ngModel)]="pharmaorderObject.deliveryMode" (change)="checkDeliveryMode()">
+              <!--
+                            <option value="Express" class="labelValue">Express</option>
+                            <option value="Express11" class="labelValue">Express11</option>
+                            <option value="Express12" class="labelValue">Express12</option>
+                            <option value="General" class="labelValue">General</option>
+                        -->
+              <option *ngFor="let delmode of delModeList" value="{{delmode.value}}" class="labelValue">{{delmode.name}}
+              </option>
+            </select>
+
+          </div>
+        </div>
+      </div>
+
+
+      <div style="border: 0; padding: 10;" class="row marginTop">
+        <div class="col-md-12 form-group">
+          <label for="email" class="labelTitles"><b>Upload prescription from storage device <span
+                *ngIf="customerOldPrescriptionListArr && customerOldPrescriptionListArr.length > 0"> <br>OR<br> just
+                click a row on an old prescription from the list below </span> </b></label>
+        </div>
+        <div class="col-md-12 form-group marginTop" (click)="enlargePic()">
+
+          <div class="profile-image-wrapper">
+            <div class="profile-image" [style.backgroundImage]="getPhoto('prescription') ">
+              <span class="edit-icon" (click)="capturePhoto(null,'prescription')">
+                <!-- (click)="enlargePic()"
+                      <i class="fa fa-plus" aria-hidden="true" *ngIf="mode=='add'" ></i>
+                      <i class="fa fa-pencil-square-o" *ngIf="mode=='edit'" aria-hidden="true" ></i>
+                     -->
+              </span>
+            </div>
+          </div>
+          <input type="file" name="files[]" id="file-selector" accept=".jpg, .jpeg, .png"
+            (change)="capturePhoto($event,'prescription')" />
+        </div>
+      </div>
+
+      <div class="card-body prescriptionlistclass table-responsive "> <span class="pb-3 "><b> Click on any row of old
+            prescription from the list below </b> </span>
+        <table class="table table-striped table-bordered table-sm">
+          <thead>
+            <tr>
+              <th> </th>
+              <!--th>ID</th-->
+              <th>Image</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tbody *ngIf="customerOldPrescriptionListArr && customerOldPrescriptionListArr.length>0">
+
+            <tr *ngFor="let photo of customerOldPrescriptionListArr" (click)="selectPrescription(photo)">
+              <td>
+
+                <div class="custom-control custom-radio customradio">
+                  <input class="customradio" type="radio" name="mode" [value]="photo.selectValue"
+                    [(ngModel)]="photo.selectValue" (click)="selectPrescription(photo)"
+                    [checked]="photo.selectValue==true">
+                </div>
+
+              </td>
+              <!--td> {{obj?._id}} </td-->
+              <td>
+                <div class="oldprescription-image-wrapper">
+                  <div class="oldprescription-image" [style.backgroundImage]="getPhotoOldPrescription(photo)"
+                    (click)="enlargePrescription(photo)">
+
+
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <div formArrayName="medicineListItems" *ngFor="let medicine of getControls(); let i = index;">
+
+        <div [formGroupName]="i">
+
+          <table class="table table-bordered table-sm mt-2">
+            <thead>
+              <tr>
+                <th>Id </th>
+                <th>Medicine Name</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="width: 10%">{{i+1}}</td>
+                <td style="width: 60%">
+
+              <tr class="customwidth">
+                <!--pattern="\d{1,2}/\d{1,2}/\d{4}"-->
+                <div class="customwidth marginTop">
+
+
+                  <ng-autocomplete [data]="medicineArray" placeHolder="Type In Medicine Name Here"
+                    [searchKeyword]="keywordMedicine" (selected)='medicineSelectEvent($event,i)'
+                    (inputChanged)='doctorMedcineSearch($event,i)' [itemTemplate]="itemTemplate"
+                    [notFoundTemplate]="notFoundTemplate">
+                  </ng-autocomplete>
+
+
+                  <ng-template #itemTemplate id="itemTemplate" let-item>
+                    <a [innerHTML]="item.name"></a>
+                  </ng-template>
+                  <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                  </ng-template>
+
+                </div>
+              </tr>
+              <tr>
+
+                <input disabled class=" customwidth form-control" formControlName="medicineName">
+              </tr>
+
+              </td>
+
+              <td style="width: 30%">
+                <input class="form-control" formControlName="quantity" placeholder="Quantity">
+
+              </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="row text-right ml-2">
+          <i class="fa fa-minus-circle customfiltericon m-10" aria-hidden="true" (click)="removeItem(i)"><span
+              class="reducetextforicon">Remove</span></i>
+          <!--
+          <button class="btn btn-dark" (click)="removeItem(i)"> Remove Medicine </button>-->
+        </div>
+      </div>
+
+      <!--Chosen name: {{ orderForm.controls.items.controls[i].controls.name.value }} -->
+
+
+
+      <div class="col-md-12 text-right mt-4">
+        <i class="fa fa-plus-circle customfiltericon m-10" aria-hidden="true" (click)="addItem()"><span
+            class="reducetextforicon">Add</span></i>
+        <!--
+  <button class="btn btn-dark" (click)="addItem()"> Add More Medicines </button>
+  -->
+      </div>
+
+
+
+
+
+
+
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="!pharmaorderFormGroup.valid" type="button" class="btn btn-primary m-10"
+        (click)="save();">Save</button>
+      <button type="button" class="btn btn-primary m-10" (click)="closeMainModal();">Cancel</button>
+    </div>
+
+    <p *ngIf="submitAttempt" class="cutomeerrortext">
+
+      <span class="redcolor ml-2"><i class="fa fas fa-exclamation"></i><b>&nbsp;Fix The Error : </b></span>
+      {{form_fill_failure_msg}}
+
+    </p>
+
+  </form>
+</ng-template>
+
+<!--jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination-->
+
+<div class="my-container">
+  <ng-template #customLoadingTemplate>
+
+    Please wait..fetching data
+
+  </ng-template>
+  <ngx-loading [show]="loading" [config]="{ primaryColour: 'blue',secondaryColour:'red',fullScreenBackdrop:false}"
+    [template]="customLoadingTemplate"></ngx-loading>
+</div>

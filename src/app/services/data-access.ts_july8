@@ -1,0 +1,1125 @@
+import { Injectable } from '@angular/core';
+import {HttpClientModule,HttpHeaders} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+//import 'rxjs/add/operator/map';
+
+import { Config } from '../config';
+@Injectable()
+export class DataAccess {
+    data: any;
+    //apiUrl = 'http://'+Config.productionHost//'http://'+Config.host+':'+Config.port;
+    apiUrl = 'http://'+Config.host+':'+Config.port;
+    
+  /*  headers : this.headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, DELETE',
+      'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',
+      //'Access-Control-Allow-Credentials': true ,
+      'Content-Type': 'application/json'
+    }
+*/
+  
+  constructor(public http: HttpClient,public headers: HttpHeaders) {
+    this.headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE,GET',    'Access-Control-Allow-headers : this.headers: headers : this.headers': 'X-Requested-With,content-type,Access-Control-Allow-Origin',       'Content-Type': 'application/json'  })
+
+    if(Config.forProduction){
+      this.apiUrl = Config.productionHost
+    }
+    //console.log('Hello Restapi Provider = '+this.apiUrl);
+  }
+
+  
+  fetchAttendantList(data){
+    //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+    
+      //  var data ={"jinishKey":jinishKey}
+        return new Promise((resolve,reject) => {
+          this.http.post(this.apiUrl+'/api/attendant-list',data,{headers : this.headers})
+            //.map(res => res.json()) 
+            .subscribe(response => {
+            
+              //  //console.log("****** patient response  ===== **"+JSON.stringify(response))
+              if(response && response['status'] == true){                
+                let data = response['data']
+                //console.log("inside attendant-list "+data)
+                resolve(data);
+              }else if(response && response['status'] == false){                
+                reject(response)
+              }
+              
+            });
+        });
+   }
+  fetchPatients(data){
+    //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+    
+      //  var data ={"jinishKey":jinishKey}
+        return new Promise((resolve,reject) => {
+          this.http.post(this.apiUrl+'/api/fetchPatients',data,{headers : this.headers})
+            //.map(res => res.json()) 
+            .subscribe(response => {
+            
+              //  //console.log("****** patient response  ===== **"+JSON.stringify(response))
+              if(response && response['status'] == true){                
+                let data = response['data']
+                //console.log("inside fetchPatients "+data)
+                resolve(data);
+              }else if(response && response['status'] == false){                
+                reject(response)
+              }
+              
+            });
+        });
+   }
+   fetchDoctors(data){
+      //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+    
+      return new Promise((resolve,reject) => {
+        this.http.post(this.apiUrl+'/api/fetchDoctors',data,{headers : this.headers})
+         // .map(res => res.json()) 
+          .subscribe(response => {
+                        
+          //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+           
+            if(response && response['status'] == true){                
+              let data = response['data']
+              //console.log("inside fetchPatients "+data)
+              resolve(data);
+            }else if(response && response['status'] == false){                
+              reject(response)
+            }
+
+          });
+      });
+      
+ }
+
+ fetchUsers(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchUsers',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+ editUser(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/editUser',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+        ////console.log("******  response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+addUser(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  ////console.log("data == "+JSON.stringify(this.userGroup))
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/addUser',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+addDoctor(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  ////console.log("data == "+JSON.stringify(this.userGroup))
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/signup',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+
+
+
+ fetchAllmonthsAppointment(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetch-allmonths-appointment',{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+fetchUsersCount(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchUsersCount',{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+       //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response){                
+          let data = response['data']['recordCount']
+          //console.log("inside fetchUsersCount "+data)
+          resolve(data);
+        }else if(!response ){                
+          reject(response)
+        }
+
+      });
+  });
+  }
+
+fetchDoctorsCount(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchDoctorsCount',{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+       //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response){                
+          let data = response['data']['recordCount']
+          //console.log("inside fetchDoctorsCount "+data)
+          resolve(data);
+        }else if(!response ){                
+          reject(response)
+        }
+
+      });
+  });
+  }
+
+fetchPatientsCount(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchPatientsCount',{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+       //console.log("****** Patient response  ===== **"+JSON.stringify(response))
+       
+        if(response){                
+          let data = response['data']['recordCount']
+          //console.log("inside fetchPatientsCount "+data)
+          resolve(data);
+        }else if(!response ){                
+          reject(response)
+        }
+
+      });
+  });
+  }
+fetchMonthInvoices(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+ // //console.log("**data   ===== **"+JSON.stringify(data))
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchMonthInvoices',data,{headers : this.headers})     
+      .subscribe(response => {
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+fetchAllPatients(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetch-all-patients-autocom',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+fetchAllLocations(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/all-practice-locations-autocom',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+fetchAllMedicines(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetch-all-medicines-autocom',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+        ////console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+         // //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+fetchAllOrdersById(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetch-all-orders-autocom',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** order response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+fetchAllDoctors(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetch-all-doctors-autocom',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+fetchAll(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/all-practice-locations-autocom',{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+fetchDaysApointment(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/view-todays-appointment',{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetch-allmonths-appointment "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+fetchPatientById(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchPatientDetails',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))       
+      if(response && response['status'] == true){                
+        let data = response['data']
+        //console.log("inside fetch-allmonths-appointment "+data)
+        resolve(data);
+      }else if(response && response['status'] == false){                
+        reject(response)
+      }
+
+    });
+  });
+  
+}
+
+
+
+fetchLocationById(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/practice-location-byid',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))       
+      if(response && response['status'] == true){                
+        let data = response['data']
+        //console.log("inside practice-location "+data)
+        resolve(data);
+      }else if(response && response['status'] == false){                
+        reject(response)
+      }
+
+    });
+  });
+  
+}
+fetchDoctrById(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchDoctorDetails',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))       
+      if(response && response['status'] == true){                
+        let data = response['data']
+        //console.log("inside "+data)
+        resolve(data);
+      }else if(response && response['status'] == false){                
+        reject(response)
+      }
+
+    });
+  });
+  
+}
+ updatePatient(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/updateProfile',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+        //  //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+}
+  
+  updateDoctor(data){
+    
+    return new Promise((resolve,reject) => {
+      this.http.post(this.apiUrl+'/api/updateDoctor',data,{headers : this.headers })
+       // .map(res => res.json()) 
+        .subscribe(response => {                      
+          //console.log("****** doctor response  ===== **"+JSON.stringify(response))         
+          if(response && response['status'] == true){                
+            let data = response['data']
+          //  //console.log("inside fetchPatients "+data)
+            resolve(data);
+          }else if(response && response['status'] == false){                
+            reject(response)
+          }
+  
+        });
+    });
+    
+}
+
+loginUser(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/login-user',data,{headers : this.headers})     
+      .subscribe(response => {
+            
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside loginUser "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+fetchAppointmentsCount(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchAppointmentsCount',{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+       //console.log("****** appointment response  ===== **"+JSON.stringify(response))
+       
+        if(response){                
+          let data = response['data']['recordCount']
+          //console.log("inside fetchAppointmentsCount "+data)
+          resolve(data);
+        }else if(!response ){                
+          reject(response)
+        }
+
+      });
+  });
+  }
+fetchAppointments(data){
+      //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+    
+      return new Promise((resolve,reject) => {
+        this.http.post(this.apiUrl+'/api/fetchAppointments',data,{headers : this.headers})
+         // .map(res => res.json()) 
+          .subscribe(response => {
+                        
+          //  //console.log("****** appointment response  ===== **"+JSON.stringify(response))
+           
+            if(response && response['status'] == true){                
+              let data = response['data']
+              //console.log("inside fetchPatients "+data)
+              resolve(data);
+            }else if(response && response['status'] == false){                
+              reject(response)
+            }
+
+          });
+      });
+      
+ }
+
+ addAppointment(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  ////console.log("data == "+JSON.stringify(this.userGroup))
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/raise-appointment-request',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+updateAppointment(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  ////console.log("data == "+JSON.stringify(this.userGroup))
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/update-appointment',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+
+
+fetchLocationsCount(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchLocationsCount',{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+       //console.log("****** location response  ===== **"+JSON.stringify(response))
+       
+        if(response){                
+          let data = response['data']['recordCount']
+          //console.log("inside fetchLocationsCount "+data)
+          resolve(data);
+        }else if(!response ){                
+          reject(response)
+        }
+
+      });
+  });
+  }
+fetchLocations(data){
+      //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+    
+      return new Promise((resolve,reject) => {
+        this.http.post(this.apiUrl+'/api/fetchLocations',data,{headers : this.headers})
+         // .map(res => res.json()) 
+          .subscribe(response => {
+                        
+          //  //console.log("****** location response  ===== **"+JSON.stringify(response))
+           
+            if(response && response['status'] == true){                
+              let data = response['data']
+              //console.log("inside fetchPatients "+data)
+              resolve(data);
+            }else if(response && response['status'] == false){                
+              reject(response)
+            }
+
+          });
+      });
+      
+ }
+
+ addLocation(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  ////console.log("data == "+JSON.stringify(this.userGroup))
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/practice-location-add',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+updateLocation(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  ////console.log("data == "+JSON.stringify(this.userGroup))
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/practice-location-edit',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** doctor response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchPatients "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+fetchCustomers(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchCustomers',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** customer response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchcustomers "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+addCustomer(data){
+//const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+////console.log("data == "+JSON.stringify(this.userGroup))
+
+return new Promise((resolve,reject) => {
+this.http.post(this.apiUrl+'/api/addCustomer',data,{headers : this.headers})
+ // .map(res => res.json()) 
+  .subscribe(response => {
+                
+  //  //console.log("****** customer response  ===== **"+JSON.stringify(response))
+   
+    if(response && response['status'] == true){                
+      let data = response['data']
+      //console.log("inside fetchcustomers "+data)
+      resolve(data);
+    }else if(response && response['status'] == false){                
+      reject(response)
+    }
+
+  });
+});
+
+}
+
+fetchCustomersCount(){
+//const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+return new Promise((resolve,reject) => {
+this.http.post(this.apiUrl+'/api/fetchCustomersCount',{headers : this.headers})
+ // .map(res => res.json()) 
+  .subscribe(response => {
+                
+   //console.log("****** customer response  ===== **"+JSON.stringify(response))
+   
+    if(response){                
+      let data = response['data']['recordCount']
+      //console.log("inside fetchCustomersCount "+data)
+      resolve(data);
+    }else if(!response ){                
+      reject(response)
+    }
+
+  });
+});
+}
+
+
+fetchAllCustomers(data){
+//const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+return new Promise((resolve,reject) => {
+this.http.post(this.apiUrl+'/api/fetch-all-customers-autocom',data,{headers : this.headers})
+ // .map(res => res.json()) 
+  .subscribe(response => {
+                
+  //  //console.log("****** customer response  ===== **"+JSON.stringify(response))
+   
+    if(response && response['status'] == true){                
+      let data = response['data']
+      //console.log("inside fetch-allmonths-appointment "+data)
+      resolve(data);
+    }else if(response && response['status'] == false){                
+      reject(response)
+    }
+
+  });
+});
+
+}
+
+updateCustomer(data){
+//const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+return new Promise((resolve,reject) => {
+  this.http.post(this.apiUrl+'/api/updateCustomer',data,{headers : this.headers})
+   // .map(res => res.json()) 
+    .subscribe(response => {                      
+      //console.log("****** customer response  ===== **"+JSON.stringify(response))         
+      if(response && response['status'] == true){                
+        let data = response['data']
+      //  //console.log("inside fetchcustomers "+data)
+        resolve(data);
+      }else if(response && response['status'] == false){                
+        reject(response)
+      }
+
+    });
+});
+
+}
+
+
+fetchOrders(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchOrders',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** order response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchorders "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+fetchOrdersByFilters(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+  return new Promise((resolve,reject) => {
+    this.http.post(this.apiUrl+'/api/fetchOrdersByFilters',data,{headers : this.headers})
+     // .map(res => res.json()) 
+      .subscribe(response => {
+                    
+      //  //console.log("****** order response  ===== **"+JSON.stringify(response))
+       
+        if(response && response['status'] == true){                
+          let data = response['data']
+          //console.log("inside fetchorders "+data)
+          resolve(data);
+        }else if(response && response['status'] == false){                
+          reject(response)
+        }
+
+      });
+  });
+  
+}
+
+
+fetchOrdersByFilterCount(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+  
+  return new Promise((resolve,reject) => {
+  this.http.post(this.apiUrl+'/api/fetchOrdersByFilterCount',data,{headers : this.headers})
+   // .map(res => res.json()) 
+    .subscribe(response => {
+                  
+     //console.log("****** order response  ===== **"+JSON.stringify(response))
+     
+      if(response && response['data'] &&  response['data']['recordCount']){                
+        let data = response['data']['recordCount']
+        //console.log("inside fetchOrdersCount "+data)
+        resolve(data);
+      }else if(!response ){                
+        reject(response)
+      }
+      resolve(0)
+  
+    });
+  });
+  }
+  
+addOrder(data){
+//const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+////console.log("data == "+JSON.stringify(this.userGroup))
+
+return new Promise((resolve,reject) => {
+this.http.post(this.apiUrl+'/api/addOrder',data,{headers : this.headers})
+ // .map(res => res.json()) 
+  .subscribe(response => {
+                
+  //  //console.log("****** order response  ===== **"+JSON.stringify(response))
+   
+    if(response && response['status'] == true){                
+      let data = response['data']
+      //console.log("inside fetchorders "+data)
+      resolve(data);
+    }else if(response && response['status'] == false){                
+      reject(response)
+    }
+
+  });
+});
+
+}
+addOrderPrescription(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+  
+  ////console.log("data == "+JSON.stringify(this.userGroup))
+  
+  return new Promise((resolve,reject) => {
+  this.http.post(this.apiUrl+'/api/upload-order-prescription',data,{headers : this.headers})
+   // .map(res => res.json()) 
+    .subscribe(response => {
+                  
+    //  //console.log("****** order response  ===== **"+JSON.stringify(response))
+     
+      if(response && response['status'] == true){                
+        let data = response['data']
+        //console.log("inside fetchorders "+data)
+        resolve(data);
+      }else if(response && response['status'] == false){                
+        reject(response)
+      }
+  
+    });
+  });
+  
+  }
+
+fetchOrdersCount(data){
+//const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+return new Promise((resolve,reject) => {
+this.http.post(this.apiUrl+'/api/fetchOrdersCount',data,{headers : this.headers})
+ // .map(res => res.json()) 
+  .subscribe(response => {
+                
+   //console.log("****** order response  ===== **"+JSON.stringify(response))
+   
+    if(response){                
+      let data = response['data']['recordCount']
+      //console.log("inside fetchOrdersCount "+data)
+      resolve(data);
+    }else if(!response ){                
+      reject(response)
+    }
+
+  });
+});
+}
+
+
+fetchAllOrders(data){
+//const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+return new Promise((resolve,reject) => {
+this.http.post(this.apiUrl+'/api/fetch-all-orders-autocom',data,{headers : this.headers})
+ // .map(res => res.json()) 
+  .subscribe(response => {
+                
+  //  //console.log("****** order response  ===== **"+JSON.stringify(response))
+   
+    if(response && response['status'] == true){                
+      let data = response['data']
+      //console.log("inside fetch-allmonths-appointment "+data)
+      resolve(data);
+    }else if(response && response['status'] == false){                
+      reject(response)
+    }
+
+  });
+});
+
+}
+
+fetchAllOrderPrescriptions(data){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+  
+  return new Promise((resolve,reject) => {
+  this.http.post(this.apiUrl+'/api/fetch-all-order-prescriptions-for-orders',data,{headers : this.headers})
+   // .map(res => res.json()) 
+    .subscribe(response => {
+                  
+    //  //console.log("****** order response  ===== **"+JSON.stringify(response))
+     
+      if(response && response['status'] == true){                
+        let data = response['data']
+        //console.log("inside fetch-allmonths-appointment "+data)
+        resolve(data);
+      }else if(response && response['status'] == false){                
+        reject(response)
+      }
+  
+    });
+  });
+  
+  }
+
+fetchAllCustomersNotByName(){
+  //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+return new Promise((resolve,reject) => {
+this.http.post(this.apiUrl+'/api/fetch-all-customers',{headers : this.headers})
+ // .map(res => res.json()) 
+  .subscribe(response => {
+                
+  //  //console.log("****** customer response  ===== **"+JSON.stringify(response))
+   
+    if(response && response['status'] == true){                
+      let data = response['data']
+      //console.log("inside fetch-allmonths-appointment "+data)
+      resolve(data);
+    }else if(response && response['status'] == false){                
+      reject(response)
+    }
+
+  });
+});
+}
+
+
+updateOrder(data){
+ // var headers : this.headersVal:any = this.getCustomheaders : this.headers()
+
+ //const headers : this.headers = { 'Access-Control-Allow-Origin': '*',   'Access-Control-Allow-Methods': 'POST, DELETE',    'Access-Control-Allow-headers : this.headers': 'X-Requested-With,content-type',       'Content-Type': 'application/json'  }
+
+return new Promise((resolve,reject) => {
+  this.http.post(this.apiUrl+'/api/updateOrder',data,{headers : this.headers})
+   // .map(res => res.json()) 
+    .subscribe(response => {                      
+      //console.log("****** order response  ===== **"+JSON.stringify(response))         
+      if(response && response['status'] == true){                
+        let data = response['data']
+      //  //console.log("inside fetchorders "+data)
+        resolve(data);
+      }else if(response && response['status'] == false){                
+        reject(response)
+      }
+
+    });
+});
+
+}
+
+
+
+
+
+}

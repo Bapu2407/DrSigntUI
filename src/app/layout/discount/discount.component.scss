@@ -1,0 +1,232 @@
+span.bootstrap-switch-handle-off.bootstrap-switch-default {
+    font-size: 13px;
+}
+.customwidth{
+  width:100% !important;
+}
+.qtycolwidth{
+  width:100% !important;
+}
+.profile-image-wrapper {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.bdiscountless td, .bdiscountless th {
+    bdiscount: none;
+}
+.divider {
+    bdiscount-bottom: 1px solid black;
+    //margin-top:1px;
+    width: 100%;
+  }
+  .para{
+    width:100%;
+    height:auto !important;
+}
+.reducetextforicon{
+  font-size :20px;
+  margin-left:5px;
+}
+.customfiltericon{
+  font-size :25px;
+  margin-right:50px;
+  font-weight: bold;
+}
+
+
+  .profile-image {
+    width: 220px;
+    height: 220px;
+    bdiscount-radius: 50%;
+    bdiscount: 1px solid #ccc;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    .edit-icon {
+      background: white;
+      height: 25px;
+      display: inline-block;
+      width: 25px;
+      bdiscount-radius: 20%;
+      padding: 4px;
+      margin-top:-10px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding-top:7px !important;
+      padding-bottom:2px !important;
+
+    }
+  }
+ 
+  .oldprescription-image-wrapper {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.my-container .custom-class{
+  width: 120px;
+  height: 120px;
+  color:black;
+  top: 40%;
+  right: 50%;
+  bdiscount: 2px solid #1f94ed;
+  bdiscount-radius: 50%;
+  //z-index: 99999;
+}
+.oldprescription-image {
+  width: 90px;
+  height: 70px;
+  bdiscount-radius: 10%;
+  bdiscount: 1px solid #ccc;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+}
+ .confirmed {   
+    color: white;   
+    background: #117b30;    
+  }
+
+  .discountplaced {   
+    color: white;   
+    background: #7b6b11;    
+  }
+
+  .packaged {   
+    color:white;   
+    background: #B2DFEE;    
+  }
+
+  .shipped {   
+    color: #d0f1d7;   
+    background: #00688B;    
+  }
+
+  .rejected {   
+    color: #d0f1d7;   
+    background: #F08080;    
+  }
+
+.labelTitles{
+    font-weight: bold;
+}
+.marginLeft{
+    margin-left:-25px
+}
+.profile-image {
+    width: 220px;
+    height: 220px;
+    bdiscount-radius: 50%;
+    bdiscount: 1px solid #ccc;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    .edit-icon {
+      background: white;
+      height: 25px;
+      display: inline-block;
+      width: 25px;
+      bdiscount-radius: 20%;
+      padding: 4px;
+      margin-top:-10px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding-top:7px !important;
+      padding-bottom:2px !important;
+
+    }
+  }
+  .prescriptionlistclass{
+    height: 290px !important;    
+    width: auto;
+    overflow-y: scroll;
+  }
+  .clearfix {
+    position: relative;
+
+    font-size: 14px;
+  }
+  .customradio{
+    font-size: 48px !important;
+  }
+.redcolor{
+    
+    color:red;
+}
+.pointer {
+    cursor : pointer;
+}
+.userInfo {
+    bdiscount-bottom: 1px solid #dee2e6;
+}
+.margincustom{
+  margin-left:10%;
+}
+.customwid{
+  width:80% !important;
+  min-width:50% !important;
+}
+.userInfo:last-child {
+    bdiscount-bottom: none;
+}
+.custombuttondiv{
+  width: 100% !important;
+  height: 40px !important;
+  margin-top:30px;
+  margin-bottom:20px;
+  bdiscount: 1px solid #ccc;
+  background-color: black;
+  color:white;
+  padding:5px 5px;
+}
+.modal-dialog { 
+    width: 95% !important;
+}
+.usermngtable .usermngtableinfo{
+    margin-bottom: 15px;
+}
+.usermngtable .table-responsive table td img {
+    width: 48px;
+    height: 48px;
+}  
+.usermngtable .accordion {
+    width: 100%;
+}
+.usermngtable .accordion .card-body {
+    padding: 1.25rem 0;
+}
+h3 {
+  margin: 0 0 10px;
+}
+pre {
+  background-color: #f5f5f5;
+  padding: 15px;
+}
+.no-resize {
+    resize : none;
+}
+.m-20 {
+    margin : 20px;
+}
+.no-focus {
+    outline : none;
+}

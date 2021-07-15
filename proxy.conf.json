@@ -1,0 +1,1 @@
+{ "/api": { "target": "http://drsignet-prod-alb-957410967.ap-south-1.elb.amazonaws.com:8181", "secure": false } }

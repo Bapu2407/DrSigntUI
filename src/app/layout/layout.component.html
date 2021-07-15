@@ -1,0 +1,7 @@
+<app-header></app-header> <!--*ngIf="showSideBar"-->
+<app-sidebar></app-sidebar>
+
+<section class="main-container" [ngClass]="{ 'customClassMainContainer': showSideBar,'customClassHugeMarginMainContainer':!showSideBar}" >
+    
+    <router-outlet ></router-outlet>
+</section>

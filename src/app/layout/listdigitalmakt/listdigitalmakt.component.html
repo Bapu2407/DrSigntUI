@@ -1,0 +1,114 @@
+<div>
+  <app-page-header [heading]="'Digital Marketing Orders'" [icon]="'fa-user'"></app-page-header>
+</div>
+
+<div class="col-md-12" >
+      
+  <!--div class="card-header">
+      User type
+  </div-->
+  <div class="card-body table-responsive marginLeft"> <span class="pb-3 "><b> List of existing {{userKind}}s </b>  </span>
+    <table class="table table-blistdigitalmakted table-sm">
+      <thead>
+      <tr>
+        <th>Lead Id </th>
+          <th>Customer Name</th>
+          <th>Customer Email</th>
+          <th>Customer Mobile</th>
+          <th>Medicine Details</th>
+                    
+          
+          <th>Created Date</th>
+          <th >Prescription</th>
+      </tr>
+      </thead>
+      <tbody>
+          <tbody *ngIf="normalFiltereduserListArr && normalFiltereduserListArr.length>0">
+        
+          <tr class="{{obj.status | lowercase}}"  *ngFor="let obj of normalFiltereduserListArr | paginate: { id:'forlistdigitalmakt1', itemsPerPage: pageSize, currentPage: pageNo, totalItems: totalDocRecords }">              
+     
+              <td>{{obj?._id}}</td>                  
+              <td>{{obj?.name}}</td>                  
+              <td>{{obj?.emailId}}</td>                  
+              <td>{{obj?.mobileNumber}}</td>                  
+          <td >
+            
+            <table  class='table blistdigitalmaktless'>
+              <tr class="{{obj.status | lowercase}}" *ngFor="let med of obj.medicineList"><td class="customdiv"><b>Name:</b></td><td>{{med?.medicineName}}</td><td>/</td><td class="customdiv"><b>Qty:</b></td><td>{{med?.quantity}}</td><!--td>/</td><td class="customdiv"><b>Mg:</b></td><td>{{med?.mg}}</td--></tr>
+            
+            </table>      
+
+          </td>              
+          
+<td >{{convertToHumanDate(obj.createdDate)}}</td>
+<!-- [disabled]="obj.status=='Confirmed'"-->
+<td >
+<button class="btn btn-dark" (click)="viewPrescription(obj)"> View Prescription</button></td>    
+
+        </tr>
+      </tbody>
+      <div class="col-md-12 text-left clearfix ">
+      <pagination-controls class="my-pagination marginLeft"  id="forlistdigitalmakt1" 
+           (pageChange)="pageChanged($event)"
+                  (pageBoundsCorrection)="pageChanged($event)"                      
+                  directionLinks="true"               maxSize="9"
+                  directionLinks="true"
+                  autoHide="true"
+                  responsive="true"
+                  previousLabel="Prev"
+                  nextLabel="Next"
+                  screenReaderPaginationLabel="Pagination"
+                  screenReaderPageLabel="page"
+                  screenReaderCurrentLabel="You're on page"></pagination-controls >
+      </div>
+      <tbody *ngIf="(normalFiltereduserListArr && normalFiltereduserListArr.length==0)">
+          <tr>
+            <td colspan="7" align = "center">No record available</td>
+          </tr>
+        </tbody>
+    </table>
+  </div>
+  
+
+
+  <ng-template #enlargedImageModal let-close="close">
+    <div class="modal-header py-1">
+      <h4 class="modal-title headerTitle mb-0">Enlarged Prescription View</h4>
+      
+      <button type="button" class="close" (click)="closeCustomModal();">×</button>
+  </div>
+  
+  <div class="modal-body">
+    <img src="{{enlargedPic}}" class="para"/>
+  </div>
+  </ng-template>
+  <ng-template #enlargedPrescriptionModal let-close="close">
+    <div class="modal-header py-1">
+      <h4 class="modal-title headerTitle mb-0">Enlarged View</h4>
+      
+      <button type="button" class="close" (click)="closeCustomModal2();">×</button>
+  </div>
+  
+  <div class="modal-body">
+    <img src="{{enlargedPrescPic}}" class="para"/>
+  </div>
+  </ng-template>
+
+<div class="my-container">
+  <ng-template #customLoadingTemplate>
+    
+            Please wait..
+    
+</ng-template>
+  <ngx-loading [show]="loading" [config]="{ primaryColour: 'blue',secondaryColour:'red',fullScreenBackdrop:false}" [template]="customLoadingTemplate"></ngx-loading>
+</div>
+
+
+
+
+<!--jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination-->
+
+
+
+
+

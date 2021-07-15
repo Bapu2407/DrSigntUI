@@ -1,0 +1,78 @@
+
+
+<div [@routerTransition]>
+
+
+
+  <br />
+  <div class="row">
+    <div class="col col-xl-6 col-lg-6">
+      <h6><b>Total appointments each month</b></h6>
+      <div>
+        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [colors]="invoiceChartColors"
+          [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
+        </canvas>
+      </div>
+    </div>
+    <div class="col col-xl-6 col-lg-6">
+      <h6><b>Invoices in a month</b></h6>
+      <div>
+        <canvas baseChart [datasets]="invoiceChartData" [labels]="invoiceChartLabels" [options]="invoiceChartOptions"
+          [legend]="invoiceChartLegend" [colors]="invoiceChartColors" [chartType]="invoiceChartType">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="card mb-3">
+        <div class="card-header custom_text">
+          Today's Appointments
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col col-md-12">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Location</th>
+                      <th>Patient Name</th>
+                      <th>Appointment Status</th>
+                      <th>Appointment Date</th>
+                      <th>Appointment Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let appointment of appointmentList; let i = index">
+                      <td>
+
+                        <b>Address &nbsp; &nbsp; :&nbsp; &nbsp; </b>{{appointment?.location?.address}}<br>
+                        <b>Area&nbsp; &nbsp; :&nbsp; &nbsp; </b>{{appointment?.location?.area}}<br>
+                        <b>City &nbsp; &nbsp; :&nbsp; &nbsp; </b>{{appointment?.location?.city}}
+                      </td>
+                      <td>{{appointment?.patient?.name}}</td>
+                      <td>{{appointment?.status}}</td>
+                      <td>{{convertToHumanDate(appointment.appointmentDate)}}</td>
+
+                      <td>{{appointment?.appointmentTime}}</td>
+                    </tr>
+                  </tbody>
+                  <tbody *ngIf="(appointmentList && appointmentList.length==0)">
+                    <tr>
+                      <td colspan="7" align="center">No record available</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <br />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Pre loader -->
+<div class="my-container">
+  <ngx-loading [show]="loading"></ngx-loading>
+</div>
